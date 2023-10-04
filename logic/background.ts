@@ -46,6 +46,8 @@ const checkForActive = () => {
   chrome.storage.local
     .get(["SHIFRONIM_IS_ACTIVE", "SHIFRONIM_MESSAGE_KEY"])
     .then((res) => {
+      if (!res.SHIFRONIM_IS_ACTIVE) return deactivateShifronim();
+
       if (res.SHIFRONIM_IS_ACTIVE && res.SHIFRONIM_MESSAGE_KEY) {
         activateShifronim(res.SHIFRONIM_MESSAGE_KEY);
       }

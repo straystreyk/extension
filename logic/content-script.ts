@@ -99,7 +99,7 @@ document.addEventListener("DOMContentLoaded", () => {
         sendResponse({ success: true });
       });
     }
-    if (request.action === "STOP_SHIFR") {
+    if (request.action === "STOP_SHIFR" && observer) {
       observer?.disconnect();
       observer = undefined;
       removeShifronimTextField();

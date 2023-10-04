@@ -5,6 +5,12 @@ function App() {
   const [isOn, setIsOn] = useState(false);
   const [key, setKey] = useState("");
   const [loading, setLoading] = useState(false);
+  const [url, setUrl] = useState("");
+
+  const isPermissionDenied =
+    !url ||
+    url.includes("chrome://newtab") ||
+    url.includes("chrome://extensions");
 
   const turnOn = () => {
     setLoading(true);
@@ -34,6 +40,10 @@ function App() {
 
   useEffect(() => {
     const checkForActive = async () => {
+      chrome.tabs.query({ active: true, lastFocusedWindow: true }, (tabs) => {
+        const url = tabs?.[0].url || "";
+        setUrl(url);
+      });
       const res = await chrome.storage.local.get([
         "SHIFRONIM_IS_ACTIVE",
         "SHIFRONIM_MESSAGE_KEY",
@@ -47,23 +57,30 @@ function App() {
 
   return (
     <div id="___APP___">
-      <h2 style={{ color: isOn ? "lightgreen" : "grey" }}>
-        <>{isOn ? "Шифроним включен" : "Шифроним выключен"}</>
-      </h2>
-
-      <input
-        disabled={isOn}
-        type="text"
-        value={key}
-        onChange={(e) => setKey(e.target.value)}
-      />
-      {key && (
-        <button
-          disabled={loading}
-          onClick={() => (isOn ? turnOff() : turnOn())}
-        >
-          {isOn ? "Выключить" : "Включить"}
-        </button>
+      {isPermissionDenied ? (
+        <h2 style={{ color: "grey" }}>
+          На этой странице расширение недоступно
+        </h2>
+      ) : (
+        <>
+          <h2 style={{ color: isOn ? "lightgreen" : "grey" }}>
+            <>{isOn ? "Шифроним включен" : "Шифроним выключен"}</>
+          </h2>
+          <input
+            disabled={isOn}
+            type="text"
+            value={key}
+            onChange={(e) => !isOn && setKey(e.target.value)}
+          />
+          {key && (
+            <button
+              disabled={loading}
+              onClick={() => (isOn ? turnOff() : turnOn())}
+            >
+              {isOn ? "Выключить" : "Включить"}
+            </button>
+          )}
+        </>
       )}
     </div>
   );
