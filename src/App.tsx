@@ -7,10 +7,7 @@ function App() {
   const [loading, setLoading] = useState(false);
   const [url, setUrl] = useState("");
 
-  const isPermissionDenied =
-    !url ||
-    url.includes("chrome://newtab") ||
-    url.includes("chrome://extensions");
+  const isPermissionDenied = !url || url.includes("chrome:");
 
   const turnOn = () => {
     setLoading(true);
@@ -40,7 +37,7 @@ function App() {
 
   useEffect(() => {
     const checkForActive = async () => {
-      chrome.tabs.query({ active: true, lastFocusedWindow: true }, (tabs) => {
+      chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
         const url = tabs?.[0].url || "";
         setUrl(url);
       });

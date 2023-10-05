@@ -4,7 +4,7 @@ const activateShifronim = async (key: string) => {
   try {
     const [tab] = await chrome.tabs.query({
       active: true,
-      lastFocusedWindow: true,
+      currentWindow: true,
     });
     await chrome.storage.local.set({
       SHIFRONIM_IS_ACTIVE: true,
@@ -17,7 +17,7 @@ const activateShifronim = async (key: string) => {
 
     return { success: true };
   } catch (e) {
-    console.log(e.message);
+    console.log(e.message, "from activateShifronim");
     return { success: false };
   }
 };
@@ -42,7 +42,7 @@ const deactivateShifronim = async () => {
   }
 };
 
-const checkForActive = () => {
+const checkForActive = async () => {
   chrome.storage.local
     .get(["SHIFRONIM_IS_ACTIVE", "SHIFRONIM_MESSAGE_KEY"])
     .then((res) => {
@@ -83,12 +83,19 @@ const encryptMessage = async (text: string) => {
   return "!?!SHIFRONIM!?!" + encrypted;
 };
 
-chrome.tabs.onUpdated.addListener(() => {
-  checkForActive();
+chrome.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
+  if (tab.url && tab.status === "complete") {
+    checkForActive();
+  }
 });
+chrome.tabs.onActivated.addListener((activeInfo) => {
+  chrome.tabs.get(activeInfo.tabId).then((tab) => {
+    if (tab.url && tab.status === "complete") {
+      checkForActive();
+    }
+  });
 
-chrome.tabs.onActivated.addListener(() => {
-  checkForActive();
+  return true;
 });
 
 chrome.runtime.onInstalled.addListener(() => {
