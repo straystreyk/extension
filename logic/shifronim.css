@@ -1,4 +1,4 @@
-#SHIFRONIM_TEXT_WRAPPER {
+#___SHIFRONIM_WRAPPER___ {
   position: fixed;
   top: 0;
   left: 50%;
@@ -6,4 +6,9 @@
   transform: translateX(-50%);
   background-color: #000;
   padding: 20px;
+}
+
+:host-context(#___SHIFRONIM_WRAPPER___) .shifronim-content-div {
+  display: flex;
+  flex-direction: column;
 }

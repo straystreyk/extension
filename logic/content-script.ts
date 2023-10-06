@@ -1,8 +1,19 @@
 let observer: MutationObserver | undefined = undefined;
-const div = document.createElement("div");
-const textAreaElement = document.createElement("input");
+const container = document.createElement("div");
+const shadowRoot = container.attachShadow({
+  mode: "open",
+  delegatesFocus: true,
+});
+const contentContainer = document.createElement("div");
+const textAreaElement = document.createElement("textarea");
 const button = document.createElement("button");
+
+contentContainer.classList.add("shifronim-content-div");
+textAreaElement.classList.add("shifronim-content-textarea");
+button.classList.add("shifronim-content-button");
 button.innerText = "Encrypt";
+
+const keyDownStopPropagation = (e: KeyboardEvent) => e.stopPropagation();
 
 const btnClick = async () => {
   const inputValue = textAreaElement.value;
@@ -24,16 +35,21 @@ const btnClick = async () => {
 
 const createShifronimTextField = () => {
   button.addEventListener("click", btnClick);
+  textAreaElement.addEventListener("keydown", keyDownStopPropagation);
 
-  div.id = "SHIFRONIM_TEXT_WRAPPER";
-  div.appendChild(textAreaElement);
-  div.appendChild(button);
+  container.id = "___SHIFRONIM_WRAPPER___";
+  contentContainer.appendChild(textAreaElement);
+  contentContainer.appendChild(button);
 
-  document.body.prepend(div);
+  shadowRoot.appendChild(contentContainer);
+
+  document.body.prepend(container);
 };
 const removeShifronimTextField = () => {
   button.removeEventListener("click", btnClick);
-  div.remove();
+  textAreaElement.removeEventListener("keydown", keyDownStopPropagation);
+
+  container.remove();
 };
 
 const replaceTextToInitial = () => {
