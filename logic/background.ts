@@ -1,4 +1,4 @@
-import * as crypto from "crypto-js";
+import * as cryptoJS from "crypto-js";
 
 const activateShifronim = async (key: string) => {
   try {
@@ -63,10 +63,10 @@ const decryptMessage = async (text: string) => {
   if (!replaced) return "";
 
   try {
-    const decrypted = crypto.AES.decrypt(
+    const decrypted = cryptoJS.AES.decrypt(
       replaced.trim(),
       res.SHIFRONIM_MESSAGE_KEY
-    ).toString(crypto.enc.Utf8);
+    ).toString(cryptoJS.enc.Utf8);
     return JSON.parse(decrypted).text;
   } catch (e) {
     return text;
@@ -76,7 +76,7 @@ const encryptMessage = async (text: string) => {
   const res = await chrome.storage.local.get(["SHIFRONIM_MESSAGE_KEY"]);
   if (!res.SHIFRONIM_MESSAGE_KEY) return "";
 
-  const encrypted = crypto.AES.encrypt(
+  const encrypted = cryptoJS.AES.encrypt(
     JSON.stringify({ text }),
     res.SHIFRONIM_MESSAGE_KEY
   ).toString();

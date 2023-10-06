@@ -5,10 +5,34 @@
   z-index: 9999;
   transform: translateX(-50%);
   background-color: #000;
+  border-radius: 8px;
   padding: 20px;
 }
 
-:host-context(#___SHIFRONIM_WRAPPER___) .shifronim-content-div {
+#___SHIFRONIM_WRAPPER___ * {
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+}
+
+#___SHIFRONIM_WRAPPER___::part(shifronim-content-div) {
   display: flex;
   flex-direction: column;
+}
+
+#___SHIFRONIM_WRAPPER___::part(shifronim-content-textarea) {
+  margin-bottom: 16px;
+  width: 400px;
+  height: 100px;
+}
+
+#___SHIFRONIM_WRAPPER___::part(shifronim-content-button) {
+  background: #535bf2;
+  border: none;
+  cursor: pointer;
+  padding: 12px 24px;
+}
+
+#___SHIFRONIM_WRAPPER___::part(shifronim-content-button):hover {
+  background: #4048ce;
 }

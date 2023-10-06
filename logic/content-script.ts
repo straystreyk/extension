@@ -8,8 +8,11 @@ const contentContainer = document.createElement("div");
 const textAreaElement = document.createElement("textarea");
 const button = document.createElement("button");
 
+contentContainer.setAttribute("part", "shifronim-content-div");
 contentContainer.classList.add("shifronim-content-div");
+textAreaElement.setAttribute("part", "shifronim-content-textarea");
 textAreaElement.classList.add("shifronim-content-textarea");
+button.setAttribute("part", "shifronim-content-button");
 button.classList.add("shifronim-content-button");
 button.innerText = "Encrypt";
 
