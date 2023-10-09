@@ -1,6 +1,6 @@
 let observer: MutationObserver | undefined = undefined;
 const container = document.createElement("div");
-const shadowRoot = container.attachShadow({
+const shadowRoot = container?.attachShadow({
   mode: "open",
   delegatesFocus: true,
 });
@@ -68,6 +68,8 @@ const replaceTextToInitial = () => {
 };
 
 async function replaceTextInElement(element) {
+  if (element.parentElement.dataset.shifronimEncrypted) return;
+
   if (element.nodeType === Node.TEXT_NODE) {
     if (element?.textContent?.includes("!?!SHIFRONIM!?!")) {
       if (

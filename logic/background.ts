@@ -1,4 +1,9 @@
 import * as cryptoJS from "crypto-js";
+import {
+  decryptRSAMessage,
+  encryptRSAMessage,
+  generateAndStoreKeyPairs,
+} from "./helpers";
 
 const activateShifronim = async (key: string) => {
   try {
@@ -84,26 +89,21 @@ const encryptMessage = async (text: string) => {
 };
 
 chrome.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
-  if (tab.url && tab.status === "complete") {
-    checkForActive();
-  }
+  if (tab.url) checkForActive();
 });
+
 chrome.tabs.onActivated.addListener((activeInfo) => {
   chrome.tabs.get(activeInfo.tabId).then((tab) => {
-    if (tab.url && tab.status === "complete") {
-      checkForActive();
-    }
+    if (tab.url) checkForActive();
   });
 
   return true;
 });
 
-chrome.runtime.onInstalled.addListener(() => {
-  chrome.contextMenus.create({
-    id: "1",
-    title: "Зашифровать",
-    contexts: ["selection"],
-  });
+chrome.runtime.onInstalled.addListener(async () => {
+  await generateAndStoreKeyPairs();
+
+  return true;
 });
 
 chrome.runtime.onMessage.addListener((msg, sender, sendResponse) => {
@@ -122,9 +122,18 @@ chrome.runtime.onMessage.addListener((msg, sender, sendResponse) => {
       sendResponse(res);
     });
   }
-
   if (msg.action === "SHIFRONIM_DEACTIVATE") {
     deactivateShifronim().then(sendResponse);
+  }
+  if (msg.action === "SHIFRONIM_ENCRYPT_RSA") {
+    encryptRSAMessage(msg.secretWord, msg.publicKey).then(async (text) => {
+      sendResponse({ success: true, text });
+    });
+  }
+  if (msg.action === "SHIFRONIM_DECRYPT_RSA") {
+    decryptRSAMessage(msg.encryptedSecretWord).then(async (text) => {
+      sendResponse({ success: true, text });
+    });
   }
 
   return true;
