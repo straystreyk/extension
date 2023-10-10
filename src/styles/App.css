@@ -24,8 +24,13 @@
   flex-shrink: 0;
 }
 
+.turn-on-off-title > button {
+  display: flex;
+}
+
 .turn-on-off-wrapper > input {
   flex-grow: 1;
+  padding: 17px 24px;
 }
 
 .turn-on-off-btn.active {

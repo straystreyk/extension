@@ -15,7 +15,8 @@ const activateShifronim = async (key: string) => {
       SHIFRONIM_IS_ACTIVE: true,
       SHIFRONIM_MESSAGE_KEY: key,
     });
-    await chrome.tabs.sendMessage(tab.id, {
+
+    await chrome.tabs.sendMessage(tab.id as number, {
       action: "START_SHIFR",
     });
     console.log("START SHIFR BG_JS");
@@ -38,7 +39,7 @@ const deactivateShifronim = async () => {
     await chrome.storage.local.set({
       SHIFRONIM_IS_ACTIVE: false,
     });
-    await chrome.tabs.sendMessage(tab.id, {
+    await chrome.tabs.sendMessage(tab.id as number, {
       action: "STOP_SHIFR",
     });
     return { success: true };
@@ -127,14 +128,18 @@ chrome.runtime.onMessage.addListener((msg, sender, sendResponse) => {
     deactivateShifronim().then(sendResponse);
   }
   if (msg.action === "SHIFRONIM_ENCRYPT_RSA") {
-    encryptRSAMessage(msg.secretWord, msg.publicKey).then(async (text) => {
-      sendResponse({ success: true, text });
-    });
+    encryptRSAMessage(msg.secretWord, msg.publicKey)
+      .then(async (text) => {
+        sendResponse({ success: true, text });
+      })
+      .catch(() => sendResponse({ success: false }));
   }
   if (msg.action === "SHIFRONIM_DECRYPT_RSA") {
-    decryptRSAMessage(msg.encryptedSecretWord).then(async (text) => {
-      sendResponse({ success: true, text });
-    });
+    decryptRSAMessage(msg.encryptedSecretWord)
+      .then(async (text) => {
+        sendResponse({ success: true, text });
+      })
+      .catch(() => sendResponse({ success: false }));
   }
 
   return true;

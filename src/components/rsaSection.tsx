@@ -1,6 +1,7 @@
 import { nanoid } from "nanoid";
 import { useState } from "react";
 import { CustomIcon } from "./customIcon";
+import { toast } from "sonner";
 
 export const RsaSection = () => {
   const [publicKeyValue, setPublicKeyValue] = useState("");
@@ -45,8 +46,13 @@ export const RsaSection = () => {
                 if (res.text) {
                   setSecretWord("");
                   setPublicKeyValue("");
-                  navigator.clipboard.writeText(res.text);
+                  await navigator.clipboard.writeText(res.text);
+                  toast.success("Зашифрованное слово скопировано");
+
+                  return;
                 }
+
+                toast.error("Произошла ошибка");
               }
             );
           }}

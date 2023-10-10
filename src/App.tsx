@@ -5,7 +5,7 @@ import { RsaSection } from "./components/rsaSection";
 import { CustomIcon } from "./components/customIcon";
 import { toast } from "sonner";
 
-const App = () => {
+export const App = () => {
   const [isOn, setIsOn] = useState(false);
   const [key, setKey] = useState("");
   const [loading, setLoading] = useState(false);
@@ -42,6 +42,27 @@ const App = () => {
     );
   };
 
+  const decryptRSAWord = () => {
+    if (!encryptedSecretWord) return;
+
+    chrome.runtime.sendMessage(
+      {
+        action: "SHIFRONIM_DECRYPT_RSA",
+        encryptedSecretWord: encryptedSecretWord.trim(),
+      },
+      async (res) => {
+        if (res?.text) {
+          setEncryptedSecretWord("");
+          await navigator.clipboard.writeText(res.text);
+          toast.success("Слово скопировано в буфер обмена");
+          return;
+        }
+
+        toast.error("Что-то пошло не так");
+      }
+    );
+  };
+
   useEffect(() => {
     const checkForActive = async () => {
       chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
@@ -62,8 +83,8 @@ const App = () => {
   return (
     <div id="___SHIFRONIM_APP___">
       {isPermissionDenied ? (
-        <h2 style={{ color: "grey" }}>
-          На этой странице расширение недоступно
+        <h2 style={{ color: "#fff", textAlign: "center" }}>
+          На этой странице расширение&nbsp;недоступно
         </h2>
       ) : (
         <>
@@ -102,31 +123,10 @@ const App = () => {
               value={encryptedSecretWord}
               onChange={(e) => setEncryptedSecretWord(e.target.value)}
             />
-            <button
-              onClick={() => {
-                if (!encryptedSecretWord) return;
-
-                chrome.runtime.sendMessage(
-                  {
-                    action: "SHIFRONIM_DECRYPT_RSA",
-                    encryptedSecretWord: encryptedSecretWord.trim(),
-                  },
-                  async (res) => {
-                    if (res.text) {
-                      setEncryptedSecretWord("");
-                      navigator.clipboard.writeText(res.text);
-                    }
-                  }
-                );
-              }}
-            >
-              Дешифровать секретное слово
-            </button>
+            <button onClick={decryptRSAWord}>Дешифровать</button>
           </div>
         </>
       )}
     </div>
   );
 };
-
-export default App;
