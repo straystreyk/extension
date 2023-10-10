@@ -68,7 +68,7 @@ const replaceTextToInitial = () => {
 };
 
 async function replaceTextInElement(element) {
-  if (element.parentElement.dataset.shifronimEncrypted) return;
+  if (element.parentElement?.dataset?.shifronimEncrypted) return;
 
   if (element.nodeType === Node.TEXT_NODE) {
     if (element?.textContent?.includes("!?!SHIFRONIM!?!")) {

@@ -1,9 +1,10 @@
 import { defineConfig, splitVendorChunkPlugin } from "vite";
 import { resolve } from "path";
+import svgr from "vite-plugin-svgr";
 import react from "@vitejs/plugin-react";
 
 export default defineConfig({
-  plugins: [react(), splitVendorChunkPlugin()],
+  plugins: [react(), splitVendorChunkPlugin(), svgr()],
   build: {
     rollupOptions: {
       treeshake: true,

@@ -18,6 +18,7 @@ const activateShifronim = async (key: string) => {
     await chrome.tabs.sendMessage(tab.id, {
       action: "START_SHIFR",
     });
+    console.log("START SHIFR BG_JS");
     await chrome.action.setBadgeText({ text: "ON", tabId: tab.id });
 
     return { success: true };
@@ -42,7 +43,7 @@ const deactivateShifronim = async () => {
     });
     return { success: true };
   } catch (e) {
-    console.log(e.message);
+    console.log(e.message, "from deactivateShifronim");
     return { success: false };
   }
 };

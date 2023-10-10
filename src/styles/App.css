@@ -1,0 +1,61 @@
+#___SHIFRONIM_APP___ {
+  padding: 24px;
+  min-width: 450px;
+}
+
+.section {
+  margin-bottom: 40px;
+}
+
+.turn-on-off-wrapper {
+  display: flex;
+  width: 100%;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.turn-on-off-title {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.turn-on-off-title > svg {
+  flex-shrink: 0;
+}
+
+.turn-on-off-wrapper > input {
+  flex-grow: 1;
+}
+
+.turn-on-off-btn.active {
+  background: var(--white);
+  color: var(--color1);
+}
+
+.rsa-section-inputs {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.rsa-section-input-wrapper {
+  position: relative;
+  display: flex;
+  width: 100%;
+}
+
+.rsa-section-input-wrapper > input {
+  flex-grow: 1;
+  padding-right: 60px;
+}
+
+.rsa-section-crate-word-btn {
+  position: absolute;
+  right: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  top: 0;
+  bottom: 0;
+}
