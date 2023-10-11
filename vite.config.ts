@@ -17,7 +17,7 @@ export default defineConfig({
         popup: resolve(__dirname, "popup.html"),
         background: resolve(__dirname, "logic", "background.ts"),
         "content-script": resolve(__dirname, "logic", "content-script.ts"),
-        shifronim: resolve(__dirname, "logic", "shifronim.css"),
+        shifronim: resolve(__dirname, "logic", "shifronim.scss"),
       },
     },
     cssCodeSplit: true,

@@ -1,11 +1,17 @@
 {
   "manifest_version": 3,
   "name": "__MSG_extName__",
-  "version": "0.0.1",
-  "description": "A Web Extension created with Vite",
-  "default_locale": "en",
+  "version": "1.0.0",
+  "description": "Расширения для расшифровки и дешифровки сообщений",
+  "default_locale": "ru",
   "action": {
     "default_popup": "popup.html"
+  },
+  "icons": {
+    "16": "./favicones/16.png",
+    "32": "./favicones/32.png",
+    "48": "./favicones/48.png",
+    "128": "./favicones/128.png"
   },
   "permissions": [
     "storage",

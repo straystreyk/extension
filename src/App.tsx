@@ -1,4 +1,4 @@
-import "./styles/App.css";
+import "./styles/App.scss";
 import { useEffect, useState } from "react";
 import { copyPublicKey } from "./helpers/common";
 import { RsaSection } from "./components/rsaSection";
@@ -54,7 +54,7 @@ export const App = () => {
         if (res?.text) {
           setEncryptedSecretWord("");
           await navigator.clipboard.writeText(res.text);
-          toast.success("Слово скопировано в буфер обмена");
+          toast.success("Дешифрованное слово скопировано в буфер обмена");
           return;
         }
 

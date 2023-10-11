@@ -14,14 +14,16 @@ textAreaElement.setAttribute("part", "shifronim-content-textarea");
 textAreaElement.classList.add("shifronim-content-textarea");
 button.setAttribute("part", "shifronim-content-button");
 button.classList.add("shifronim-content-button");
-button.innerText = "Encrypt";
+button.innerText = "Зашифровать";
 
 const keyDownStopPropagation = (e: KeyboardEvent) => e.stopPropagation();
 
 const btnClick = async () => {
   const inputValue = textAreaElement.value;
-  button.disabled = true;
+  if (!inputValue) return;
+
   try {
+    button.disabled = true;
     const { text } = await chrome.runtime.sendMessage({
       action: "SHIFRONIM_ENCRYPT",
       text: inputValue,
@@ -32,11 +34,21 @@ const btnClick = async () => {
     console.log("#CODE_CONTENT_BTN_CLICK");
   }
 
-  button.disabled = false;
+  button.innerText = "Скопировано в буфер обмена";
+
+  setTimeout(() => {
+    button.innerText = "Зашифровать";
+    button.disabled = false;
+  }, 1000);
+
   textAreaElement.value = "";
 };
 
 const createShifronimTextField = () => {
+  const shifronimApp = document.getElementById("___SHIFRONIM_WRAPPER___");
+  const shifronimAlreadyInPage = !!shifronimApp;
+  if (shifronimAlreadyInPage) shifronimApp.remove();
+
   button.addEventListener("click", btnClick);
   textAreaElement.addEventListener("keydown", keyDownStopPropagation);
 
@@ -75,14 +87,14 @@ async function replaceTextInElement(element: HTMLElement) {
     if (element?.textContent?.includes("!?!SHIFRONIM!?!")) {
       if (
         element?.parentElement?.isContentEditable ||
-        (element?.parentElement?.tagName &&
-          ["INPUT", "TEXTAREA"].indexOf(element.parentElement.tagName) >= 0)
+        ["INPUT", "TEXTAREA"].indexOf(
+          (element.parentElement as HTMLElement).tagName
+        ) >= 0
       )
         return;
 
-      if (element?.parentElement?.dataset?.shifronimEncrypted) {
-        element.parentElement.dataset.shifronimEncrypted = element.textContent;
-      }
+      (element.parentElement as HTMLElement).dataset.shifronimEncrypted =
+        element.textContent;
 
       const { text } = await chrome.runtime.sendMessage({
         action: "SHIFRONIM_DECRYPT",
@@ -115,10 +127,6 @@ function watchForDynamicContent() {
 }
 
 chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
-  if (request.action === "HEALTHCHECK") {
-    sendResponse({ message: "healthy" });
-  }
-
   if (request.action === "START_SHIFR" && !observer) {
     createShifronimTextField();
     replaceTextInElement(document.body).then(() => {

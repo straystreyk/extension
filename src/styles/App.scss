@@ -18,6 +18,7 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
+  margin-bottom: 16px;
 }
 
 .turn-on-off-title > svg {
@@ -34,8 +35,8 @@
 }
 
 .turn-on-off-btn.active {
-  background: var(--white);
-  color: var(--color1);
+  background: var(--SHIFRONIM_WHITE);
+  color: var(--SHIFRONIM_COLOR1);
 }
 
 .rsa-section-inputs {

@@ -4,8 +4,8 @@
     "sourceMap": true,
     "noImplicitAny": true,
     "module": "esnext",
-    "moduleResolution": "node",
     "target": "esnext",
+    "moduleResolution": "node",
     "jsx": "react-jsx",
     "allowJs": true,
     "esModuleInterop": true,
@@ -15,5 +15,4 @@
     "resolveJsonModule": true,
   },
   "include": ["src"],
-  "references": [{ "path": "./tsconfig.node.json" }]
 }

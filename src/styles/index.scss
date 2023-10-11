@@ -1,14 +1,4 @@
-@import url("https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&display=swap");
-
-:root {
-  --color1: #090909;
-  --color2: #212121;
-  --color3: #181818;
-  --color4: #6e6e6e;
-  --color5: #6db95a;
-  --color6: #dd5e5e;
-  --white: #ffffff;
-}
+@import "theme";
 
 html,
 body {
@@ -17,24 +7,33 @@ body {
   box-sizing: border-box;
   font-family: "Montserrat", sans-serif;
   font-size: 16px;
-  background: var(--color1);
-  color: var(--white);
+  background: var(--SHIFRONIM_COLOR1);
+  color: var(--SHIFRONIM_WHITE);
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  margin: 0;
 }
 
 button {
   cursor: pointer;
   border: none;
-  background: var(--color2);
+  background: var(--SHIFRONIM_COLOR2);
   font-size: 16px;
   padding: 12px;
   border-radius: 8px;
-  color: var(--white);
+  color: var(--SHIFRONIM_WHITE);
   transition: 0.2s all ease;
 }
 
 button:hover {
-  background: var(--white);
-  color: var(--color3);
+  background: var(--SHIFRONIM_WHITE);
+  color: var(--SHIFRONIM_COLOR3);
 }
 
 input,
@@ -42,9 +41,9 @@ textarea {
   border: none;
   padding: 12px 24px;
   font-size: 16px;
-  background: var(--color2);
+  background: var(--SHIFRONIM_COLOR2);
   border-radius: 8px;
-  color: var(--white);
+  color: var(--SHIFRONIM_WHITE);
   outline: none;
 }
 
@@ -55,7 +54,7 @@ textarea:disabled {
 
 input:focus,
 textarea:focus {
-  background: var(--color3);
+  background: var(--SHIFRONIM_COLOR3);
   outline: none;
 }
 button:focus {
@@ -63,5 +62,5 @@ button:focus {
 }
 input::placeholder,
 textarea::placeholder {
-  color: var(--color4);
+  color: var(--SHIFRONIM_COLOR4);
 }

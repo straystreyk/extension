@@ -1,0 +1,63 @@
+@import "./src/styles/theme";
+
+#___SHIFRONIM_WRAPPER___ {
+  position: fixed;
+  top: 0;
+  left: 50%;
+  z-index: 9999;
+  transform: translateX(-50%);
+  background-color: var(--SHIFRONIM_COLOR1);
+  border-radius: 8px;
+  padding: 20px;
+
+  & * {
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+  }
+
+  & *::part {
+    font-family: "Montserrat", sans-serif;
+  }
+
+  &::part(shifronim-content-div) {
+    display: flex;
+    flex-direction: column;
+  }
+
+  &::part(shifronim-content-textarea) {
+    margin-bottom: 16px;
+    width: 400px;
+    height: 100px;
+    background: var(--SHIFRONIM_COLOR2);
+    color: var(--SHIFRONIM_WHITE);
+    border: none;
+    resize: none;
+    padding: 12px;
+    font-family: "Montserrat", sans-serif;
+    font-size: 16px;
+
+    &:focus {
+      background: var(--SHIFRONIM_COLOR3);
+      outline: none;
+    }
+  }
+
+  &::part(shifronim-content-button) {
+    background: var(--SHIFRONIM_COLOR2);
+    color: var(--SHIFRONIM_WHITE);
+    border: none;
+    cursor: pointer;
+    padding: 12px 24px;
+    border-radius: 8px;
+    transition: 0.2s all ease;
+    font-family: "Montserrat", sans-serif;
+    font-size: 16px;
+    font-weight: 600;
+
+    &:hover {
+      background: var(--SHIFRONIM_WHITE);
+      color: var(--SHIFRONIM_COLOR2);
+    }
+  }
+}
