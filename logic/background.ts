@@ -19,7 +19,6 @@ const activateShifronim = async (key: string) => {
     await chrome.tabs.sendMessage(tab.id as number, {
       action: "START_SHIFR",
     });
-    console.log("START SHIFR BG_JS");
     await chrome.action.setBadgeText({ text: "ON", tabId: tab.id });
 
     return { success: true };
@@ -104,6 +103,20 @@ chrome.tabs.onActivated.addListener((activeInfo) => {
 
 chrome.runtime.onInstalled.addListener(async () => {
   await generateAndStoreKeyPairs();
+
+  const contentScripts = chrome.runtime.getManifest()?.content_scripts;
+  if (!contentScripts) return;
+
+  for (const cs of contentScripts) {
+    for (const tab of await chrome.tabs.query({ url: cs.matches })) {
+      if (tab.id && cs?.js?.length) {
+        chrome.scripting.executeScript({
+          target: { tabId: tab.id },
+          files: cs.js,
+        });
+      }
+    }
+  }
 
   return true;
 });

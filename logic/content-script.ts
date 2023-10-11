@@ -60,25 +60,30 @@ const replaceTextToInitial = () => {
   allEncrypted.forEach((item: HTMLDivElement) => {
     for (let i = 0; i < item.childNodes.length; i++) {
       if (item.childNodes[i].nodeType === Node.TEXT_NODE) {
-        item.childNodes[i].textContent = item.dataset.shifronimEncrypted;
+        item.childNodes[i].textContent = item.dataset
+          .shifronimEncrypted as string;
       }
     }
     item.removeAttribute("data-shifronim-encrypted");
   });
 };
 
-async function replaceTextInElement(element) {
+async function replaceTextInElement(element: HTMLElement) {
   if (element.parentElement?.dataset?.shifronimEncrypted) return;
 
   if (element.nodeType === Node.TEXT_NODE) {
     if (element?.textContent?.includes("!?!SHIFRONIM!?!")) {
       if (
-        element.parentElement.isContentEditable ||
-        ["INPUT", "TEXTAREA"].indexOf(element.parentElement.tagName) >= 0
+        element?.parentElement?.isContentEditable ||
+        (element?.parentElement?.tagName &&
+          ["INPUT", "TEXTAREA"].indexOf(element.parentElement.tagName) >= 0)
       )
         return;
 
-      element.parentElement.dataset.shifronimEncrypted = element.textContent;
+      if (element?.parentElement?.dataset?.shifronimEncrypted) {
+        element.parentElement.dataset.shifronimEncrypted = element.textContent;
+      }
+
       const { text } = await chrome.runtime.sendMessage({
         action: "SHIFRONIM_DECRYPT",
         text: element.textContent,
@@ -90,7 +95,7 @@ async function replaceTextInElement(element) {
     }
   } else if (element.nodeType === Node.ELEMENT_NODE) {
     for (let i = 0; i < element.childNodes.length; i++) {
-      await replaceTextInElement(element.childNodes[i]);
+      await replaceTextInElement(element.childNodes[i] as HTMLElement);
     }
   }
 }
@@ -100,7 +105,7 @@ function watchForDynamicContent() {
     mutations.forEach(function (mutation) {
       if (mutation.addedNodes.length > 0) {
         mutation.addedNodes.forEach(function (node) {
-          replaceTextInElement(node);
+          replaceTextInElement(node as HTMLElement);
         });
       }
     });
@@ -110,6 +115,10 @@ function watchForDynamicContent() {
 }
 
 chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
+  if (request.action === "HEALTHCHECK") {
+    sendResponse({ message: "healthy" });
+  }
+
   if (request.action === "START_SHIFR" && !observer) {
     createShifronimTextField();
     replaceTextInElement(document.body).then(() => {

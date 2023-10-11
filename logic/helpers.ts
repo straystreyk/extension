@@ -133,6 +133,8 @@ export const decryptRSAMessage = async (message: string) => {
     Array.from(atob(message), (c) => c.charCodeAt(0))
   );
 
+  if (!keyPairs?.encryptionPrivateKey) throw new Error("No Keys");
+
   // Дешифрование
   const decryptedData = await self.crypto.subtle.decrypt(
     {
