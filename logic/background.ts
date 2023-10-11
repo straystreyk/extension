@@ -109,7 +109,7 @@ chrome.runtime.onInstalled.addListener(async () => {
 
   for (const cs of contentScripts) {
     for (const tab of await chrome.tabs.query({ url: cs.matches })) {
-      if (tab.id) {
+      if (tab.id && tab.url) {
         if (cs?.js?.length) {
           chrome.scripting.executeScript({
             target: { tabId: tab.id },
