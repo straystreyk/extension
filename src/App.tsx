@@ -119,11 +119,13 @@ export const App = () => {
             <input
               type="text"
               name="encryptedSecretWord"
-              placeholder="Дешифровать секретное слово"
+              placeholder="Секретное слово"
               value={encryptedSecretWord}
               onChange={(e) => setEncryptedSecretWord(e.target.value)}
             />
-            <button onClick={decryptRSAWord}>Дешифровать</button>
+            <button onClick={decryptRSAWord}>
+              Дешифровать секретное слово
+            </button>
           </div>
         </>
       )}
