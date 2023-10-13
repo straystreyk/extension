@@ -2,9 +2,12 @@ import { nanoid } from "nanoid";
 import { useState } from "react";
 import { CustomIcon } from "./customIcon";
 import { toast } from "sonner";
+import { Tooltip } from "react-tooltip";
+import { PasswordInput } from "./passwordInput";
+import { useAppStore } from "../helpers/store";
 
 export const RsaSection = () => {
-  const [publicKeyValue, setPublicKeyValue] = useState("");
+  const { publicKeyValue, setPublicKeyValue } = useAppStore();
   const [secretWord, setSecretWord] = useState("");
 
   return (
@@ -18,16 +21,17 @@ export const RsaSection = () => {
           onChange={(e) => setPublicKeyValue(e.target.value)}
         />
         <div className="rsa-section-input-wrapper">
-          <input
-            type="text"
+          <PasswordInput
             name="text"
             placeholder="Секретное слово"
             value={secretWord}
             onChange={(e) => setSecretWord(e.target.value)}
           />
+          <Tooltip id="secretKey" />
           <button
             onClick={() => setSecretWord(nanoid(20))}
-            className="rsa-section-crate-word-btn"
+            data-tooltip-id="secretKey"
+            data-tooltip-content="Сгенерировать секретный ключ"
           >
             <CustomIcon icon="plus" />
           </button>
