@@ -1,11 +1,16 @@
 import { create } from "zustand";
 
+export interface IContactItem {
+  name: string;
+  publicKey: string;
+  secretWord: string;
+  isActive?: boolean;
+}
+
 interface Store {
   isOn: boolean;
-  contacts: { name: string; publicKey: string; secretWord: string }[];
-  setContacts: (
-    newContacts: { name: string; publicKey: string; secretWord: string }[]
-  ) => void;
+  contacts: IContactItem[];
+  setContacts: (newContacts: IContactItem[]) => void;
   key: string;
   publicKeyValue: string;
   setIsOn: (isOn: boolean) => void;

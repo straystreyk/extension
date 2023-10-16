@@ -9,12 +9,14 @@ import { useAppStore } from "../helpers/store";
 import { ContactsSection } from "../components/contactsSection";
 
 export const MainPage = () => {
-  const { isOn, setIsOn, key, setKey } = useAppStore();
+  const { isOn, setIsOn, key, setKey, setContacts, contacts } = useAppStore();
   const [loading, setLoading] = useState(false);
   const [encryptedSecretWord, setEncryptedSecretWord] = useState("");
   const [url, setUrl] = useState("");
 
   const isPermissionDenied = !url || url.includes("chrome:");
+
+  const activeContact = contacts.filter((item) => item?.isActive)?.[0];
 
   const turnOn = () => {
     setLoading(true);
@@ -80,8 +82,10 @@ export const MainPage = () => {
       const res = await chrome.storage.local.get([
         "SHIFRONIM_IS_ACTIVE",
         "SHIFRONIM_MESSAGE_KEY",
+        "SHIFRONIM_CONTACTS",
       ]);
       if (res.SHIFRONIM_MESSAGE_KEY) setKey(res.SHIFRONIM_MESSAGE_KEY);
+      if (res.SHIFRONIM_CONTACTS) setContacts(res.SHIFRONIM_CONTACTS);
       setIsOn(!!res.SHIFRONIM_IS_ACTIVE);
     };
 
@@ -92,7 +96,7 @@ export const MainPage = () => {
   return (
     <>
       {isPermissionDenied ? (
-        <h2 style={{ color: "#fff", textAlign: "center" }}>
+        <h2 style={{ textAlign: "center" }}>
           На этой странице расширение&nbsp;недоступно
         </h2>
       ) : (
@@ -115,11 +119,11 @@ export const MainPage = () => {
                 disabled={isOn}
                 type="text"
                 placeholder="Секретное слово для шифрования"
-                value={key}
+                value={activeContact?.secretWord || key || ""}
                 onChange={(e) => !isOn && setKey(e.target.value)}
               />
               <Tooltip id="turnOn" place="bottom" />
-              <Tooltip id="clear-word-btn" />
+              <Tooltip id="clear-word-btn" place="bottom" />
               {key && (
                 <>
                   <button

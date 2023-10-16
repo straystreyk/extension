@@ -195,3 +195,57 @@
     justify-content: center;
   }
 }
+
+.contacts-list-section {
+  & > h2 {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    & > button {
+      display: flex;
+      & svg {
+        width: 16px;
+        height: 16px;
+      }
+    }
+  }
+}
+
+.contacts-list {
+  margin-top: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.contacts-list-item {
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 0 0 24px;
+  background-color: var(--SHIFRONIM_COLOR2);
+  transition: 0.2s all ease;
+
+  & span {
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+  }
+
+  &:hover {
+    background-color: var(--SHIFRONIM_COLOR3);
+  }
+}
+
+.contacts-list-item-delete-btn {
+  &:hover {
+    color: var(--SHIFRONIM_WHITE);
+    background-color: var(--SHIFRONIM_COLOR6);
+  }
+}
+
+.contacts-list-item-btns {
+  display: flex;
+  gap: 4px;
+}

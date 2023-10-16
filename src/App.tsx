@@ -5,7 +5,9 @@ import {
   RouteObject,
   RouterProvider,
 } from "react-router-dom";
-import { CreateContact } from "./components/contactsSection";
+import { CreateContact } from "./components/createContact";
+import { ContactsList } from "./components/contactsList";
+import { EditContact } from "./components/editContact";
 
 const routes: RouteObject[] = [
   {
@@ -17,7 +19,20 @@ const routes: RouteObject[] = [
       },
       {
         path: "contacts",
-        element: <CreateContact />,
+        children: [
+          {
+            element: <ContactsList />,
+            index: true,
+          },
+          {
+            path: "create",
+            element: <CreateContact />,
+          },
+          {
+            path: "edit/:publicKey",
+            element: <EditContact />,
+          },
+        ],
       },
     ],
   },

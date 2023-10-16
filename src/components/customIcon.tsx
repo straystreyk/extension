@@ -11,6 +11,10 @@ import ArrowUp from "../assets/arrowUp.svg?react";
 import ArrowDown from "../assets/arrowDown.svg?react";
 import NewContact from "../assets/newContact.svg?react";
 import Download from "../assets/download.svg?react";
+import ContactsBook from "../assets/contactsBook.svg?react";
+import Edit from "../assets/edit.svg?react";
+import Trash from "../assets/trash.svg?react";
+import ArrowLeft from "../assets/arrowLeft.svg?react";
 
 type TIcon =
   | "on"
@@ -23,7 +27,11 @@ type TIcon =
   | "eyeOpen"
   | "key"
   | "newContact"
+  | "contactsBook"
   | "download"
+  | "edit"
+  | "arrowLeft"
+  | "trash"
   | "cross";
 
 const iconsConfig: { [p in TIcon]: FC<{ className?: string }> } = {
@@ -37,8 +45,12 @@ const iconsConfig: { [p in TIcon]: FC<{ className?: string }> } = {
   cross: Cross,
   arrowDown: ArrowDown,
   arrowUp: ArrowUp,
+  arrowLeft: ArrowLeft,
   newContact: NewContact,
   download: Download,
+  contactsBook: ContactsBook,
+  edit: Edit,
+  trash: Trash,
 };
 
 export const CustomIcon: FC<{ icon: TIcon; className?: string }> = ({

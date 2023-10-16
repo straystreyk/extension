@@ -34,12 +34,16 @@ const deactivateShifronim = async () => {
       active: true,
       lastFocusedWindow: true,
     });
-    await chrome.action.setBadgeText({ text: "", tabId: tab.id });
+
+    if (tab.id) {
+      await chrome.action.setBadgeText({ text: "", tabId: tab.id });
+      await chrome.tabs.sendMessage(tab.id as number, {
+        action: "STOP_SHIFR",
+      });
+    }
+
     await chrome.storage.local.set({
       SHIFRONIM_IS_ACTIVE: false,
-    });
-    await chrome.tabs.sendMessage(tab.id as number, {
-      action: "STOP_SHIFR",
     });
     return { success: true };
   } catch (e) {
