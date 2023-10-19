@@ -114,6 +114,7 @@ export const MainPage = () => {
               <Tooltip id="copyPublic" />
             </div>
             <ContactsSection />
+            <label>Секретное слово</label>
             <div className="turn-on-off-wrapper">
               <input
                 disabled={isOn}
@@ -150,6 +151,7 @@ export const MainPage = () => {
           </section>
           <>
             <RsaSection />
+            <label>Зашифрованное секретное слово</label>
             <div className="rsa-section-inputs">
               <PasswordInput
                 name="encryptedSecretWord"

@@ -59,39 +59,42 @@ export const ContactsSection = () => {
   }, [onChange, setContacts]);
 
   return (
-    <div className="contacts">
-      <CustomSelect
-        placeholder="Выберите из списка или создайте новый контакт"
-        value={{
-          name: activeContact?.name || "",
-          value: activeContact?.publicKey || "",
-        }}
-        onChange={onChange}
-        items={items}
-      />
-      <button
-        data-tooltip-content="Создать контакт"
-        data-tooltip-id="create-contact"
-        onClick={() => navigate("/contacts/create")}
-      >
-        <CustomIcon icon="newContact" />
-        <Tooltip id="create-contact" place="bottom" />
-      </button>
-      <button
-        data-tooltip-content="Контакты"
-        data-tooltip-id="contacts"
-        onClick={() => navigate("/contacts")}
-      >
-        <CustomIcon icon="contactsBook" />
-        <Tooltip id="contacts" place="bottom" />
-      </button>
-      {/*<button*/}
-      {/*  data-tooltip-content="Экспортировать контакты"*/}
-      {/*  data-tooltip-id="export-contacts"*/}
-      {/*>*/}
-      {/*  <CustomIcon icon="download" />*/}
-      {/*  <Tooltip id="export-contacts" place="bottom" />*/}
-      {/*</button>*/}
-    </div>
+    <>
+      <label>Список контактов</label>
+      <div className="contacts">
+        <CustomSelect
+          placeholder="Выберите из списка или создайте новый контакт"
+          value={{
+            name: activeContact?.name || "",
+            value: activeContact?.publicKey || "",
+          }}
+          onChange={onChange}
+          items={items}
+        />
+        <button
+          data-tooltip-content="Создать контакт"
+          data-tooltip-id="create-contact"
+          onClick={() => navigate("/contacts/create")}
+        >
+          <CustomIcon icon="newContact" />
+          <Tooltip id="create-contact" place="bottom" />
+        </button>
+        <button
+          data-tooltip-content="Контакты"
+          data-tooltip-id="contacts"
+          onClick={() => navigate("/contacts")}
+        >
+          <CustomIcon icon="contactsBook" />
+          <Tooltip id="contacts" place="bottom" />
+        </button>
+        {/*<button*/}
+        {/*  data-tooltip-content="Экспортировать контакты"*/}
+        {/*  data-tooltip-id="export-contacts"*/}
+        {/*>*/}
+        {/*  <CustomIcon icon="download" />*/}
+        {/*  <Tooltip id="export-contacts" place="bottom" />*/}
+        {/*</button>*/}
+      </div>
+    </>
   );
 };

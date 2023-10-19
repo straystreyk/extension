@@ -1,9 +1,10 @@
 import { useNavigate } from "react-router-dom";
-import { useAppStore } from "../helpers/store";
+import { IContactItem, useAppStore } from "../helpers/store";
 import { ChangeEvent, FormEvent, useState } from "react";
 import { toast } from "sonner";
+import { CustomIcon } from "./customIcon";
 
-const initialFormState = { name: "", publicKey: "" };
+const initialFormState = { name: "", publicKey: "", secretWord: "" };
 
 export const CreateContact = () => {
   const navigate = useNavigate();
@@ -22,11 +23,12 @@ export const CreateContact = () => {
       let contacts = [];
       const res = await chrome.storage.local.get(["SHIFRONIM_CONTACTS"]);
       if (res.SHIFRONIM_CONTACTS) contacts = res.SHIFRONIM_CONTACTS;
-      const newContacts = [
+      const newContacts: IContactItem[] = [
         ...contacts,
         {
           name: formState.name,
           publicKey: formState.publicKey,
+          secretWord: formState.secretWord || "",
           isActive: false,
         },
       ];
@@ -43,7 +45,14 @@ export const CreateContact = () => {
 
   return (
     <>
-      <h2>Создание контакта</h2>
+      <div className="page-title-with-back-btn">
+        <h2>
+          <button onClick={() => navigate(-1)}>
+            <CustomIcon icon="arrowLeft" />
+          </button>
+          Создание контакта
+        </h2>
+      </div>
       <form onSubmit={handleCreate} className="create-contacts">
         <input
           name="name"
@@ -59,10 +68,14 @@ export const CreateContact = () => {
           placeholder="Публичный ключ контакта"
           onChange={handleChange}
         />
+        <input
+          name="secretWord"
+          value={formState.secretWord}
+          required
+          placeholder="Секретное слово для шифрования"
+          onChange={handleChange}
+        />
         <button type="submit">Создать</button>
-        <button onClick={() => navigate("/")} type="button">
-          Назад
-        </button>
       </form>
     </>
   );

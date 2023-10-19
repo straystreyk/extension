@@ -37,12 +37,14 @@ export const ContactsList = () => {
 
   return (
     <section className="contacts-list-section">
-      <h2>
-        <button onClick={() => navigate("/")}>
-          <CustomIcon icon="arrowLeft" />
-        </button>
-        Список контактов
-      </h2>
+      <div className="page-title-with-back-btn">
+        <h2>
+          <button onClick={() => navigate("/")}>
+            <CustomIcon icon="arrowLeft" />
+          </button>
+          Список контактов
+        </h2>
+      </div>
       <div className="contacts-list">
         {!contacts.length && <h2>Здесь еще нет контактов</h2>}
         {!!contacts?.length &&

@@ -12,29 +12,35 @@ export const RsaSection = () => {
 
   return (
     <section className="section">
+      <label>Публичный ключ собеседника</label>
       <div className="rsa-section-inputs">
-        <input
-          type="text"
-          name="publicKey"
-          placeholder="Вставьте публичный ключ"
-          value={publicKeyValue}
-          onChange={(e) => setPublicKeyValue(e.target.value)}
-        />
         <div className="rsa-section-input-wrapper">
-          <PasswordInput
-            name="text"
-            placeholder="Секретное слово"
-            value={secretWord}
-            onChange={(e) => setSecretWord(e.target.value)}
+          <input
+            type="text"
+            name="publicKey"
+            placeholder="Вставьте публичный ключ"
+            value={publicKeyValue}
+            onChange={(e) => setPublicKeyValue(e.target.value)}
           />
-          <Tooltip id="secretKey" />
-          <button
-            onClick={() => setSecretWord(nanoid(20))}
-            data-tooltip-id="secretKey"
-            data-tooltip-content="Сгенерировать секретный ключ"
-          >
-            <CustomIcon icon="plus" />
-          </button>
+        </div>
+        <div>
+          <label>Придумайте секретное слово</label>
+          <div className="rsa-section-input-wrapper">
+            <PasswordInput
+              name="text"
+              placeholder="Секретное слово"
+              value={secretWord}
+              onChange={(e) => setSecretWord(e.target.value)}
+            />
+            <Tooltip id="secretKey" />
+            <button
+              onClick={() => setSecretWord(nanoid(20))}
+              data-tooltip-id="secretKey"
+              data-tooltip-content="Сгенерировать секретный ключ"
+            >
+              <CustomIcon icon="plus" />
+            </button>
+          </div>
         </div>
         <button
           onClick={() => {

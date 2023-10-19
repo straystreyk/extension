@@ -45,6 +45,11 @@
   color: var(--SHIFRONIM_COLOR1);
 }
 
+label {
+  margin: 4px 0;
+  display: inline-block;
+}
+
 .rsa-section-inputs {
   display: flex;
   flex-direction: column;
@@ -196,7 +201,7 @@
   }
 }
 
-.contacts-list-section {
+.page-title-with-back-btn {
   & > h2 {
     display: flex;
     align-items: center;
