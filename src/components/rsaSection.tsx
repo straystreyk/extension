@@ -1,13 +1,13 @@
 import { nanoid } from "nanoid";
-import { useState } from "react";
+import { memo, useState } from "react";
 import { CustomIcon } from "./customIcon";
 import { toast } from "sonner";
 import { Tooltip } from "react-tooltip";
 import { PasswordInput } from "./passwordInput";
 import { useAppStore } from "../helpers/store";
 
-export const RsaSection = () => {
-  const { publicKeyValue, setPublicKeyValue } = useAppStore();
+export const RsaSection = memo(() => {
+  const { activeContact } = useAppStore();
   const [secretWord, setSecretWord] = useState("");
 
   return (
@@ -15,12 +15,15 @@ export const RsaSection = () => {
       <label>Публичный ключ собеседника</label>
       <div className="rsa-section-inputs">
         <div className="rsa-section-input-wrapper">
+          <Tooltip id="public-key-tooltip" place="top" />
           <input
             type="text"
             name="publicKey"
+            disabled
             placeholder="Вставьте публичный ключ"
-            value={publicKeyValue}
-            onChange={(e) => setPublicKeyValue(e.target.value)}
+            value={activeContact?.publicKey}
+            data-tooltip-id="public-key-tooltip"
+            data-tooltip-content="Отредактировать публичный ключ можно через редактирование контактов"
           />
         </div>
         <div>
@@ -44,18 +47,18 @@ export const RsaSection = () => {
         </div>
         <button
           onClick={() => {
-            if (!secretWord || !publicKeyValue) return;
+            if (!secretWord || !activeContact.publicKey)
+              return toast.error("Введите публичный ключ и секретное слово");
 
             chrome.runtime.sendMessage(
               {
                 action: "SHIFRONIM_ENCRYPT_RSA",
-                publicKey: publicKeyValue.trim(),
+                publicKey: activeContact.publicKey.trim(),
                 secretWord: secretWord.trim(),
               },
               async (res) => {
                 if (res.text) {
                   setSecretWord("");
-                  setPublicKeyValue("");
                   await navigator.clipboard.writeText(res.text);
                   toast.success("Зашифрованное слово скопировано");
 
@@ -72,4 +75,4 @@ export const RsaSection = () => {
       </div>
     </section>
   );
-};
+});

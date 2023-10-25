@@ -1,31 +1,28 @@
 import { create } from "zustand";
 
 export interface IContactItem {
+  id: string;
   name: string;
   publicKey: string;
   secretWord: string;
-  isActive?: boolean;
+  isDefault?: boolean;
 }
 
 interface Store {
   isOn: boolean;
   contacts: IContactItem[];
+  activeContact: IContactItem;
   setContacts: (newContacts: IContactItem[]) => void;
-  key: string;
-  publicKeyValue: string;
+  setActiveContact: (activeContact: IContactItem) => void;
   setIsOn: (isOn: boolean) => void;
-  setKey: (key: string) => void;
-  setPublicKeyValue: (publicKey: string) => void;
 }
 
 export const useAppStore = create<Store>((set) => ({
   isOn: false,
-  key: "",
-  publicKeyValue: "",
   contacts: [],
+  activeContact: { id: "", name: "", secretWord: "", publicKey: "" },
 
   setIsOn: (isOn) => set(() => ({ isOn })),
-  setKey: (key) => set(() => ({ key })),
-  setPublicKeyValue: (publicKeyValue) => set(() => ({ publicKeyValue })),
   setContacts: (contacts) => set(() => ({ contacts })),
+  setActiveContact: (activeContact) => set(() => ({ activeContact })),
 }));

@@ -103,6 +103,10 @@ label {
   position: relative;
   max-width: calc(100% - 48px - 8px);
   width: 100%;
+
+  &.custom-select-disabled {
+    opacity: 0.5;
+  }
 }
 
 .select-placeholder {
@@ -201,6 +205,11 @@ label {
   }
 }
 
+.label-input-wrapper {
+  display: flex;
+  flex-direction: column;
+}
+
 .page-title-with-back-btn {
   & > h2 {
     display: flex;
@@ -238,6 +247,16 @@ label {
     overflow: hidden;
   }
 
+  & button {
+    display: flex;
+    align-items: center;
+
+    & svg {
+      width: 22px;
+      height: 22px;
+    }
+  }
+
   &:hover {
     background-color: var(--SHIFRONIM_COLOR3);
   }
@@ -253,4 +272,10 @@ label {
 .contacts-list-item-btns {
   display: flex;
   gap: 4px;
+}
+
+.react-tooltip {
+  max-width: 250px;
+  box-shadow: 0 0 5px var(--SHIFRONIM_COLOR3);
+  font-size: 14px !important;
 }

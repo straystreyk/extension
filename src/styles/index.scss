@@ -62,7 +62,8 @@ textarea {
 }
 
 input:disabled,
-textarea:disabled {
+textarea:disabled,
+button:disabled {
   opacity: 0.5;
 }
 

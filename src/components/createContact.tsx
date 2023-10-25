@@ -1,12 +1,18 @@
 import { useNavigate } from "react-router-dom";
 import { IContactItem, useAppStore } from "../helpers/store";
-import { ChangeEvent, FormEvent, useState } from "react";
+import { ChangeEvent, FormEvent, memo, useState } from "react";
 import { toast } from "sonner";
 import { CustomIcon } from "./customIcon";
+import { v4 } from "uuid";
 
-const initialFormState = { name: "", publicKey: "", secretWord: "" };
+export const initialFormState = {
+  id: "",
+  name: "",
+  publicKey: "",
+  secretWord: "",
+};
 
-export const CreateContact = () => {
+export const CreateContact = memo(() => {
   const navigate = useNavigate();
   const { setContacts } = useAppStore();
   const [formState, setFormState] = useState(initialFormState);
@@ -26,6 +32,7 @@ export const CreateContact = () => {
       const newContacts: IContactItem[] = [
         ...contacts,
         {
+          id: v4(),
           name: formState.name,
           publicKey: formState.publicKey,
           secretWord: formState.secretWord || "",
@@ -54,29 +61,38 @@ export const CreateContact = () => {
         </h2>
       </div>
       <form onSubmit={handleCreate} className="create-contacts">
-        <input
-          name="name"
-          value={formState.name}
-          required
-          placeholder="Имя контакта"
-          onChange={handleChange}
-        />
-        <input
-          name="publicKey"
-          value={formState.publicKey}
-          required
-          placeholder="Публичный ключ контакта"
-          onChange={handleChange}
-        />
-        <input
-          name="secretWord"
-          value={formState.secretWord}
-          required
-          placeholder="Секретное слово для шифрования"
-          onChange={handleChange}
-        />
+        <div className="label-input-wrapper">
+          <label>Имя контакта</label>
+          <input
+            name="name"
+            value={formState.name}
+            required
+            placeholder="Имя контакта"
+            onChange={handleChange}
+          />
+        </div>
+        <div className="label-input-wrapper">
+          <label>Публичный ключ контакта</label>
+          <input
+            name="publicKey"
+            value={formState.publicKey}
+            required
+            placeholder="Публичный ключ контакта"
+            onChange={handleChange}
+          />
+        </div>
+        <div className="label-input-wrapper">
+          <label>Секретное слово для шифрования</label>
+          <input
+            name="secretWord"
+            value={formState.secretWord}
+            required
+            placeholder="Секретное слово для шифрования"
+            onChange={handleChange}
+          />
+        </div>
         <button type="submit">Создать</button>
       </form>
     </>
   );
-};
+});

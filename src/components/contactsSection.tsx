@@ -5,36 +5,29 @@ import { Tooltip } from "react-tooltip";
 import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
 import { useAppStore } from "../helpers/store";
+import { v4 } from "uuid";
 
 export const ContactsSection = () => {
   const navigate = useNavigate();
-  const { contacts, setContacts, setPublicKeyValue } = useAppStore();
-
-  const activeContact = contacts.filter((item) => item?.isActive)?.[0];
+  const { isOn, contacts, setContacts, setActiveContact, activeContact } =
+    useAppStore();
 
   const items: ISelectItem[] = useMemo(
-    () => contacts.map((item) => ({ name: item.name, value: item.publicKey })),
+    () => contacts.map((item) => ({ value: item.id, ...item })),
     [contacts]
   );
 
   const onChange = useCallback(
-    async (item: ISelectItem) => {
+    (item: ISelectItem) => {
       try {
-        const newContacts = contacts.map((i) =>
-          i.publicKey === item.value
-            ? { ...item, isActive: true }
-            : { ...item, item: false }
-        );
-        await chrome.storage.local.set({
-          SHIFRONIM_CONTACTS: newContacts,
-        });
-        setPublicKeyValue(item.value);
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        setActiveContact(item as any);
       } catch (e) {
         toast.error(`"Произошла ошибка: ${e?.message || ""}`);
         console.log(e, "from onChange contacts");
       }
     },
-    [contacts, setPublicKeyValue]
+    [setActiveContact]
   );
 
   useEffect(() => {
@@ -45,11 +38,30 @@ export const ContactsSection = () => {
           "SHIFRONIM_ACTIVE_CONTACT",
         ]);
 
-        if (res?.SHIFRONIM_CONTACTS?.length)
-          setContacts(res.SHIFRONIM_CONTACTS);
+        const defaultContact = {
+          id: v4(),
+          name: "Контакт по умолчанию",
+          secretWord: "",
+          publicKey: "",
+          isDefault: true,
+        };
 
-        if (res?.SHIFRONIM_ACTIVE_CONTACT)
-          await onChange(res.SHIFRONIM_ACTIVE_CONTACT);
+        if (res?.SHIFRONIM_CONTACTS?.length) {
+          setContacts(res.SHIFRONIM_CONTACTS);
+        } else {
+          await chrome.storage.local.set({
+            SHIFRONIM_CONTACTS: [defaultContact],
+            SHIFRONIM_ACTIVE_CONTACT: defaultContact,
+          });
+          setContacts([defaultContact]);
+
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+          onChange(defaultContact as any);
+          return;
+        }
+
+        if (res.SHIFRONIM_ACTIVE_CONTACT)
+          onChange(res.SHIFRONIM_ACTIVE_CONTACT);
       } catch (e) {
         toast.error("Ошибка при загрузке контактов");
       }
@@ -63,6 +75,7 @@ export const ContactsSection = () => {
       <label>Список контактов</label>
       <div className="contacts">
         <CustomSelect
+          disabled={isOn}
           placeholder="Выберите из списка или создайте новый контакт"
           value={{
             name: activeContact?.name || "",
@@ -87,13 +100,6 @@ export const ContactsSection = () => {
           <CustomIcon icon="contactsBook" />
           <Tooltip id="contacts" place="bottom" />
         </button>
-        {/*<button*/}
-        {/*  data-tooltip-content="Экспортировать контакты"*/}
-        {/*  data-tooltip-id="export-contacts"*/}
-        {/*>*/}
-        {/*  <CustomIcon icon="download" />*/}
-        {/*  <Tooltip id="export-contacts" place="bottom" />*/}
-        {/*</button>*/}
       </div>
     </>
   );

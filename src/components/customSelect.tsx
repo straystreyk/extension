@@ -12,6 +12,7 @@ interface ICustomSelect {
   onChange: (item: ISelectItem) => void;
   items: ISelectItem[];
   placeholder?: string;
+  disabled?: boolean;
 }
 
 export const CustomSelect: FC<ICustomSelect> = ({
@@ -19,6 +20,7 @@ export const CustomSelect: FC<ICustomSelect> = ({
   items,
   onChange,
   placeholder,
+  disabled,
 }) => {
   const [open, setOpen] = useState(false);
 
@@ -28,8 +30,14 @@ export const CustomSelect: FC<ICustomSelect> = ({
   };
 
   return (
-    <OutClick className="custom-select" onClick={() => setOpen(false)}>
-      <div className="custom-select-name" onClick={() => setOpen((p) => !p)}>
+    <OutClick
+      className={`custom-select ${disabled ? "custom-select-disabled" : ""}`}
+      onClick={() => setOpen(false)}
+    >
+      <div
+        className="custom-select-name"
+        onClick={() => !disabled && setOpen((p) => !p)}
+      >
         <span className={`${!value.name ? "select-placeholder" : ""}`}>
           {value.name || placeholder || ""}
         </span>

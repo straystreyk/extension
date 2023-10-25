@@ -5,18 +5,40 @@ import { CustomIcon } from "./customIcon";
 import { toast } from "sonner";
 
 export const ContactsList = () => {
-  const { setContacts, contacts } = useAppStore();
+  const { setContacts, contacts, isOn, setActiveContact } = useAppStore();
   const navigate = useNavigate();
 
   const deleteContact = async (item: IContactItem) => {
     if (confirm(`Вы действительно хотите удалить контакт ${item.name}`)) {
       try {
-        const newContacts = contacts.filter(
-          (i) => i.publicKey !== item.publicKey
-        );
-        await chrome.storage.local.set({ SHIFRONIM_CONTACTS: newContacts });
+        let contactToDeleteId = undefined;
+        let defaultContact = undefined;
+        const newContacts = contacts.filter((i) => {
+          if (i.id === item.id) contactToDeleteId = i.id;
+
+          return i.id !== item.id;
+        });
+        let updatedInfo: {
+          SHIFRONIM_CONTACTS: IContactItem[];
+          SHIFRONIM_ACTIVE_CONTACT?: IContactItem;
+        } = { SHIFRONIM_CONTACTS: newContacts };
+
+        // Если человек удалил активный контакт - ставим дефолтный
+        if (contactToDeleteId) {
+          defaultContact = contacts.find((item) => item.isDefault);
+
+          if (defaultContact) {
+            updatedInfo = {
+              ...updatedInfo,
+              SHIFRONIM_ACTIVE_CONTACT: defaultContact,
+            };
+          }
+        }
+
+        await chrome.storage.local.set(updatedInfo);
 
         setContacts(newContacts);
+        defaultContact && setActiveContact(defaultContact);
       } catch (e) {
         console.log("Error in deleteContact");
         console.log(e.message);
@@ -54,16 +76,20 @@ export const ContactsList = () => {
                 <span>{item.name}</span>
                 <div className="contacts-list-item-btns">
                   <button
-                    onClick={() => navigate(`/contacts/edit/${item.publicKey}`)}
+                    disabled={isOn}
+                    onClick={() => navigate(`/contacts/edit/${item.id}`)}
                   >
                     <CustomIcon icon="edit" />
                   </button>
-                  <button
-                    className="contacts-list-item-delete-btn"
-                    onClick={() => deleteContact(item)}
-                  >
-                    <CustomIcon icon="trash" />
-                  </button>
+                  {!item.isDefault && (
+                    <button
+                      disabled={isOn}
+                      className="contacts-list-item-delete-btn"
+                      onClick={() => deleteContact(item)}
+                    >
+                      <CustomIcon icon="trash" />
+                    </button>
+                  )}
                 </div>
               </div>
             );

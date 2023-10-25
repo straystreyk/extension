@@ -29,7 +29,7 @@ const routes: RouteObject[] = [
             element: <CreateContact />,
           },
           {
-            path: "edit/:publicKey",
+            path: "edit/:id",
             element: <EditContact />,
           },
         ],

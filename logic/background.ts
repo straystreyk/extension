@@ -57,6 +57,7 @@ const checkForActive = async () => {
     .get(["SHIFRONIM_IS_ACTIVE", "SHIFRONIM_MESSAGE_KEY"])
     .then((res) => {
       if (!res.SHIFRONIM_IS_ACTIVE) return deactivateShifronim();
+      console.log(res);
 
       if (res.SHIFRONIM_IS_ACTIVE && res.SHIFRONIM_MESSAGE_KEY) {
         activateShifronim(res.SHIFRONIM_MESSAGE_KEY);
