@@ -9,8 +9,14 @@ import { useAppStore } from "../helpers/store";
 import { ContactsSection } from "../components/contactsSection";
 
 const MainSection = memo(() => {
-  const { isOn, setIsOn, activeContact, setActiveContact, contacts } =
-    useAppStore();
+  const {
+    isOn,
+    setIsOn,
+    activeContact,
+    setActiveContact,
+    setContacts,
+    contacts,
+  } = useAppStore();
   const [loading, setLoading] = useState(false);
 
   const turnOn = () => {
@@ -29,6 +35,9 @@ const MainSection = memo(() => {
             SHIFRONIM_ACTIVE_CONTACT: activeContact,
             SHIFRONIM_CONTACTS: newContacts,
           });
+
+          setContacts(newContacts);
+          setActiveContact(activeContact);
         }
         setLoading(false);
       }

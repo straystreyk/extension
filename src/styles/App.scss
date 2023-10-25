@@ -211,16 +211,25 @@ label {
 }
 
 .page-title-with-back-btn {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  & button {
+    display: flex;
+    align-items: center;
+  }
+
   & > h2 {
     display: flex;
     align-items: center;
     gap: 12px;
-    & > button {
-      display: flex;
-      & svg {
-        width: 16px;
-        height: 16px;
-      }
+  }
+
+  & .download-btn {
+    & svg {
+      width: 20px;
+      height: 20px;
     }
   }
 }
@@ -278,4 +287,19 @@ label {
   max-width: 250px;
   box-shadow: 0 0 5px var(--SHIFRONIM_COLOR3);
   font-size: 14px !important;
+}
+
+.contacts-list-header-btns {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+
+  & label {
+    display: flex;
+    margin: 0;
+  }
+}
+
+.contact-import-input {
+  display: none;
 }

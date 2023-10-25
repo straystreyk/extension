@@ -12,6 +12,8 @@ export const ContactsSection = () => {
   const { isOn, contacts, setContacts, setActiveContact, activeContact } =
     useAppStore();
 
+  console.log(contacts);
+
   const items: ISelectItem[] = useMemo(
     () => contacts.map((item) => ({ value: item.id, ...item })),
     [contacts]

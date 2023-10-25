@@ -13,6 +13,7 @@ import NewContact from "../assets/newContact.svg?react";
 import Download from "../assets/download.svg?react";
 import ContactsBook from "../assets/contactsBook.svg?react";
 import Edit from "../assets/edit.svg?react";
+import Import from "../assets/import.svg?react";
 import Trash from "../assets/trash.svg?react";
 import ArrowLeft from "../assets/arrowLeft.svg?react";
 
@@ -24,6 +25,7 @@ type TIcon =
   | "arrowUp"
   | "plus"
   | "eyeLock"
+  | "import"
   | "eyeOpen"
   | "key"
   | "newContact"
@@ -40,6 +42,7 @@ const iconsConfig: { [p in TIcon]: FC<{ className?: string }> } = {
   copy: Copy,
   plus: Plus,
   eyeLock: EyeLock,
+  import: Import,
   eyeOpen: EyeOpen,
   key: Key,
   cross: Cross,
