@@ -215,6 +215,8 @@ label {
   display: flex;
   align-items: center;
   justify-content: space-between;
+  position: relative;
+  z-index: 2;
 
   & button {
     display: flex;
@@ -322,7 +324,7 @@ label {
 }
 
 .info-page {
-  & h1 {
+  & h2 {
     margin-bottom: 24px;
   }
 }
