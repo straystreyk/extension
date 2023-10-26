@@ -23,6 +23,7 @@
   justify-content: space-between;
   align-items: center;
   margin-bottom: 16px;
+  gap: 8px;
   position: relative;
   z-index: 2;
 }
@@ -317,5 +318,11 @@ label {
   & button {
     display: flex;
     align-items: center;
+  }
+}
+
+.info-page {
+  & h1 {
+    margin-bottom: 24px;
   }
 }

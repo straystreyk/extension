@@ -6,7 +6,13 @@ import "./styles/index.scss";
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
-    <Toaster position="top-center" theme="dark" closeButton richColors />
+    <Toaster
+      duration={1100}
+      position="top-center"
+      theme="dark"
+      closeButton
+      richColors
+    />
     <App />
   </React.StrictMode>
 );

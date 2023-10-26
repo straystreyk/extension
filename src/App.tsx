@@ -1,5 +1,6 @@
 import "./styles/App.scss";
 import { MainPage } from "./pages/mainPage";
+import { InfoPage } from "./pages/infoPage";
 import {
   createMemoryRouter,
   RouteObject,
@@ -33,6 +34,10 @@ const routes: RouteObject[] = [
             element: <EditContact />,
           },
         ],
+      },
+      {
+        path: "info",
+        element: <InfoPage />,
       },
     ],
   },

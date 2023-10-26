@@ -16,6 +16,7 @@ import Edit from "../assets/edit.svg?react";
 import Import from "../assets/import.svg?react";
 import Trash from "../assets/trash.svg?react";
 import Unlock from "../assets/unlock.svg?react";
+import Info from "../assets/info.svg?react";
 import Lock from "../assets/lock.svg?react";
 import ArrowLeft from "../assets/arrowLeft.svg?react";
 
@@ -38,6 +39,7 @@ type TIcon =
   | "arrowLeft"
   | "trash"
   | "lock"
+  | "info"
   | "cross";
 
 const iconsConfig: { [p in TIcon]: FC<{ className?: string }> } = {
@@ -60,6 +62,7 @@ const iconsConfig: { [p in TIcon]: FC<{ className?: string }> } = {
   trash: Trash,
   unlock: Unlock,
   lock: Lock,
+  info: Info,
 };
 
 export const CustomIcon: FC<{ icon: TIcon; className?: string }> = ({

@@ -36,7 +36,6 @@ export const CreateContact = memo(() => {
           name: formState.name,
           publicKey: formState.publicKey,
           secretWord: formState.secretWord || "",
-          isActive: false,
         },
       ];
 

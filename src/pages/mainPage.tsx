@@ -7,6 +7,7 @@ import { RsaSection } from "../components/rsaSection";
 import { PasswordInput } from "../components/passwordInput";
 import { useAppStore } from "../helpers/store";
 import { ContactsSection } from "../components/contactsSection";
+import { useNavigate } from "react-router-dom";
 
 const MainSection = memo(() => {
   const {
@@ -18,6 +19,7 @@ const MainSection = memo(() => {
     contacts,
   } = useAppStore();
   const [loading, setLoading] = useState(false);
+  const navigate = useNavigate();
 
   const turnOn = () => {
     setLoading(true);
@@ -69,13 +71,22 @@ const MainSection = memo(() => {
       <div className="turn-on-off-title">
         <h2>Введите секретное слово и&nbsp;запустите Shifronim</h2>
         <button
-          data-tooltip-id="copyPublic"
+          data-tooltip-id="copy-public"
           data-tooltip-content="Скопировать собственный публичный ключ"
           onClick={() => copyPublicKey()}
         >
           <CustomIcon icon="key" />
         </button>
-        <Tooltip id="copyPublic" />
+        <button
+          data-tooltip-id="info-page"
+          data-tooltip-content="Инструкция по использованию"
+          onClick={() => navigate("/info")}
+        >
+          <CustomIcon icon="info" />
+        </button>
+
+        <Tooltip id="copy-public" />
+        <Tooltip id="info-page" />
       </div>
       <ContactsSection />
       <label>Секретное слово</label>
