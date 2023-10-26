@@ -15,6 +15,8 @@ import ContactsBook from "../assets/contactsBook.svg?react";
 import Edit from "../assets/edit.svg?react";
 import Import from "../assets/import.svg?react";
 import Trash from "../assets/trash.svg?react";
+import Unlock from "../assets/unlock.svg?react";
+import Lock from "../assets/lock.svg?react";
 import ArrowLeft from "../assets/arrowLeft.svg?react";
 
 type TIcon =
@@ -28,12 +30,14 @@ type TIcon =
   | "import"
   | "eyeOpen"
   | "key"
+  | "unlock"
   | "newContact"
   | "contactsBook"
   | "download"
   | "edit"
   | "arrowLeft"
   | "trash"
+  | "lock"
   | "cross";
 
 const iconsConfig: { [p in TIcon]: FC<{ className?: string }> } = {
@@ -54,6 +58,8 @@ const iconsConfig: { [p in TIcon]: FC<{ className?: string }> } = {
   contactsBook: ContactsBook,
   edit: Edit,
   trash: Trash,
+  unlock: Unlock,
+  lock: Lock,
 };
 
 export const CustomIcon: FC<{ icon: TIcon; className?: string }> = ({

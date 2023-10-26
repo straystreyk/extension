@@ -52,11 +52,11 @@ export const ContactsList = () => {
     const res = await chrome.storage.local.get(["SHIFRONIM_CONTACTS"]);
 
     if (res.SHIFRONIM_CONTACTS) {
-      const content = JSON.stringify(res.SHIFRONIM_CONTACTS);
+      const content = JSON.stringify(res.SHIFRONIM_CONTACTS, null, 2);
       const a = document.createElement("a");
       const file = new Blob([content], { type: "application/json" });
       a.href = URL.createObjectURL(file);
-      a.download = "contacts.json";
+      a.download = `contacts-${new Date(Date.now()).toLocaleDateString()}.json`;
       a.click();
     }
   };
@@ -116,7 +116,20 @@ export const ContactsList = () => {
           Список контактов
         </h2>
         <div className="contacts-list-header-btns">
-          <label htmlFor="contact-import" className="button download-btn">
+          <Tooltip id="contact-import-btn" />
+          <Tooltip id="export-contact-btn" />
+
+          <label
+            id="contact-import-btn"
+            htmlFor="contact-import"
+            className="button download-btn"
+            data-tooltip-id="edit-item-btn"
+            data-tooltip-content={
+              isOn
+                ? "Нельзя импортировать контакты пока расширение включено"
+                : "Импортировать контакты"
+            }
+          >
             <CustomIcon icon="import" />
           </label>
           <input
@@ -128,7 +141,13 @@ export const ContactsList = () => {
             accept="application/json"
             id="contact-import"
           />
-          <button onClick={contactsExport} className="download-btn">
+          <button
+            id="export-contact-btn"
+            onClick={contactsExport}
+            className="download-btn"
+            data-tooltip-content="Экспортировать контакты"
+            data-tooltip-id="export-contact-btn"
+          >
             <CustomIcon icon="download" />
           </button>
         </div>
@@ -149,14 +168,17 @@ export const ContactsList = () => {
                     disabled={isOn}
                     onClick={() => navigate(`/contacts/edit/${item.id}`)}
                     data-tooltip-id="edit-item-btn"
-                    data-tooltip-content="Редактировать контакт"
+                    data-tooltip-content={
+                      isOn
+                        ? "Нельзя редактировать контакт пока расширение включено"
+                        : "Редактировать контакт"
+                    }
                   >
                     <CustomIcon icon="edit" />
                   </button>
                   <button
-                    disabled={isOn}
                     data-tooltip-id="copy-contact"
-                    data-tooltip-content="Скопировать публичный ключ"
+                    data-tooltip-content="Скопировать публичный ключ контакта"
                     onClick={async () => {
                       try {
                         await navigator.clipboard.writeText(item.publicKey);
@@ -172,7 +194,11 @@ export const ContactsList = () => {
                   {!item.isDefault && (
                     <button
                       data-tooltip-id="delete-item-btn"
-                      data-tooltip-content="Удалить контакт"
+                      data-tooltip-content={
+                        isOn
+                          ? "Нельзя удалить контакт контакт пока расширение включено"
+                          : "Удалить контакт"
+                      }
                       disabled={isOn}
                       className="contacts-list-item-delete-btn"
                       onClick={() => deleteContact(item)}

@@ -70,7 +70,7 @@ const MainSection = memo(() => {
         <h2>Введите секретное слово и&nbsp;запустите Shifronim</h2>
         <button
           data-tooltip-id="copyPublic"
-          data-tooltip-content="Скопировать публичный ключ"
+          data-tooltip-content="Скопировать собственный публичный ключ"
           onClick={() => copyPublicKey()}
         >
           <CustomIcon icon="key" />
@@ -146,14 +146,21 @@ const DecryptSection = memo(() => {
   return (
     <>
       <label>Зашифрованное секретное слово</label>
-      <div className="rsa-section-inputs">
+      <div className="decrypt-input-wrapper">
+        <Tooltip id="decrypt-rsa-word" />
         <PasswordInput
           name="encryptedSecretWord"
           placeholder="Секретное слово"
           value={encryptedSecretWord}
           onChange={(e) => setEncryptedSecretWord(e.target.value)}
         />
-        <button onClick={decryptRSAWord}>Дешифровать секретное слово</button>
+        <button
+          data-tooltip-content="Дешифровать секретное слово"
+          data-tooltip-id="decrypt-rsa-word"
+          onClick={decryptRSAWord}
+        >
+          <CustomIcon icon="unlock" />
+        </button>
       </div>
     </>
   );

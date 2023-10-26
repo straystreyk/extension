@@ -4,7 +4,7 @@
 }
 
 .section {
-  margin-bottom: 40px;
+  margin-bottom: 32px;
 }
 
 .turn-on-off-wrapper {
@@ -128,7 +128,7 @@ label {
 }
 
 .custom-select-name {
-  padding: 16px;
+  padding: 12px;
   border-radius: 8px;
   background: var(--SHIFRONIM_COLOR2);
   cursor: pointer;
@@ -218,6 +218,11 @@ label {
   & button {
     display: flex;
     align-items: center;
+
+    & svg {
+      width: 16px;
+      height: 16px;
+    }
   }
 
   & > h2 {
@@ -287,6 +292,7 @@ label {
   max-width: 250px;
   box-shadow: 0 0 5px var(--SHIFRONIM_COLOR3);
   font-size: 14px !important;
+  text-align: center !important;
 }
 
 .contacts-list-header-btns {
@@ -302,4 +308,14 @@ label {
 
 .contact-import-input {
   display: none;
+}
+
+.decrypt-input-wrapper {
+  display: flex;
+  gap: 8px;
+
+  & button {
+    display: flex;
+    align-items: center;
+  }
 }

@@ -29,13 +29,15 @@ export const RsaSection = memo(() => {
         <div>
           <label>Придумайте секретное слово</label>
           <div className="rsa-section-input-wrapper">
+            <Tooltip id="encrypt-secret-word" />
+            <Tooltip id="secretKey" />
+
             <PasswordInput
               name="text"
               placeholder="Секретное слово"
               value={secretWord}
               onChange={(e) => setSecretWord(e.target.value)}
             />
-            <Tooltip id="secretKey" />
             <button
               onClick={() => setSecretWord(nanoid(20))}
               data-tooltip-id="secretKey"
@@ -43,35 +45,41 @@ export const RsaSection = memo(() => {
             >
               <CustomIcon icon="plus" />
             </button>
+            <button
+              data-tooltip-content="Зашифровать секретное слово"
+              data-tooltip-id="encrypt-secret-word"
+              onClick={() => {
+                if (!secretWord || !activeContact.publicKey)
+                  return toast.error(
+                    "Введите публичный ключ и секретное слово"
+                  );
+
+                chrome.runtime.sendMessage(
+                  {
+                    action: "SHIFRONIM_ENCRYPT_RSA",
+                    publicKey: activeContact.publicKey.trim(),
+                    secretWord: secretWord.trim(),
+                  },
+                  async (res) => {
+                    if (res.text) {
+                      setSecretWord("");
+                      await navigator.clipboard.writeText(res.text);
+                      toast.success("Зашифрованное слово скопировано");
+
+                      return;
+                    }
+
+                    toast.error(
+                      "Произошла ошибка. Возможно вы передали нерпавильный публичный ключ"
+                    );
+                  }
+                );
+              }}
+            >
+              <CustomIcon icon="lock" />
+            </button>
           </div>
         </div>
-        <button
-          onClick={() => {
-            if (!secretWord || !activeContact.publicKey)
-              return toast.error("Введите публичный ключ и секретное слово");
-
-            chrome.runtime.sendMessage(
-              {
-                action: "SHIFRONIM_ENCRYPT_RSA",
-                publicKey: activeContact.publicKey.trim(),
-                secretWord: secretWord.trim(),
-              },
-              async (res) => {
-                if (res.text) {
-                  setSecretWord("");
-                  await navigator.clipboard.writeText(res.text);
-                  toast.success("Зашифрованное слово скопировано");
-
-                  return;
-                }
-
-                toast.error("Произошла ошибка");
-              }
-            );
-          }}
-        >
-          Зашифровать секретное слово
-        </button>
       </div>
     </section>
   );

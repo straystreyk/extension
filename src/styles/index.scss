@@ -20,6 +20,15 @@ h6 {
   margin: 0;
 }
 
+svg {
+  width: 22px;
+  height: 22px;
+}
+
+label {
+  font-size: 14px;
+}
+
 button,
 .button {
   cursor: pointer;
@@ -50,7 +59,7 @@ button,
 input,
 textarea {
   border: none;
-  padding: 16px;
+  padding: 12px 16px;
   font-size: 16px;
   background: var(--SHIFRONIM_COLOR2);
   border-radius: 8px;
