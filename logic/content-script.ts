@@ -5,21 +5,24 @@ const shadowRoot = container?.attachShadow({
   delegatesFocus: true,
 });
 const contentContainer = document.createElement("div");
-const textAreaElement = document.createElement("textarea");
+const textAreaElement = document.createElement("div");
 const button = document.createElement("button");
 
 contentContainer.setAttribute("part", "shifronim-content-div");
 contentContainer.classList.add("shifronim-content-div");
 textAreaElement.setAttribute("part", "shifronim-content-textarea");
 textAreaElement.classList.add("shifronim-content-textarea");
+textAreaElement.contentEditable = "true";
 button.setAttribute("part", "shifronim-content-button");
 button.classList.add("shifronim-content-button");
 button.innerText = "Зашифровать";
 
-const keyDownStopPropagation = (e: KeyboardEvent) => e.stopPropagation();
+const keyDownStopPropagation = (e: KeyboardEvent) => {
+  e.stopPropagation();
+};
 
 const btnClick = async () => {
-  const inputValue = textAreaElement.value;
+  const inputValue = textAreaElement.innerText;
   if (!inputValue) return;
 
   try {
@@ -41,7 +44,7 @@ const btnClick = async () => {
     button.disabled = false;
   }, 1000);
 
-  textAreaElement.value = "";
+  textAreaElement.innerText = "";
 };
 
 const createShifronimTextField = () => {
@@ -51,6 +54,8 @@ const createShifronimTextField = () => {
 
   button.addEventListener("click", btnClick);
   textAreaElement.addEventListener("keydown", keyDownStopPropagation);
+  document.body.addEventListener("keydown", keyDownStopPropagation, true);
+  window.addEventListener("keydown", keyDownStopPropagation, true);
 
   container.id = "___SHIFRONIM_WRAPPER___";
   contentContainer.appendChild(textAreaElement);
@@ -63,6 +68,8 @@ const createShifronimTextField = () => {
 const removeShifronimTextField = () => {
   button.removeEventListener("click", btnClick);
   textAreaElement.removeEventListener("keydown", keyDownStopPropagation);
+  document.body.removeEventListener("keydown", keyDownStopPropagation, true);
+  window.removeEventListener("keydown", keyDownStopPropagation, true);
 
   container.remove();
 };
@@ -81,8 +88,6 @@ const replaceTextToInitial = () => {
 };
 
 async function replaceTextInElement(element: HTMLElement) {
-  if (element.parentElement?.dataset?.shifronimEncrypted) return;
-
   if (element.nodeType === Node.TEXT_NODE) {
     if (element?.textContent?.includes("!?!SHIFRONIM!?!")) {
       if (

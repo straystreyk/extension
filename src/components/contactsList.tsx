@@ -109,6 +109,11 @@ export const ContactsList = () => {
   return (
     <section className="contacts-list-section">
       <div className="page-title-with-back-btn">
+        <Tooltip id="contact-import-btn" />
+        <Tooltip id="export-contact-btn" />
+        <Tooltip id="delete-item-btn" place="top" />
+        <Tooltip id="edit-item-btn" place="top" />
+        <Tooltip id="copy-contact" place="top" />
         <h2>
           <button onClick={() => navigate("/")}>
             <CustomIcon icon="arrowLeft" />
@@ -116,9 +121,6 @@ export const ContactsList = () => {
           Список контактов
         </h2>
         <div className="contacts-list-header-btns">
-          <Tooltip id="contact-import-btn" />
-          <Tooltip id="export-contact-btn" />
-
           <label
             id="contact-import-btn"
             htmlFor="contact-import"
@@ -160,10 +162,6 @@ export const ContactsList = () => {
               <div className="contacts-list-item">
                 <span>{item.name}</span>
                 <div className="contacts-list-item-btns">
-                  <Tooltip id="delete-item-btn" place="top" />
-                  <Tooltip id="edit-item-btn" place="top" />
-                  <Tooltip id="copy-contact" place="top" />
-
                   <button
                     disabled={isOn}
                     onClick={() => navigate(`/contacts/edit/${item.id}`)}
