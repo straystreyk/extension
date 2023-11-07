@@ -56,6 +56,9 @@ const createShifronimTextField = () => {
   textAreaElement.addEventListener("keydown", keyDownStopPropagation);
   document.body.addEventListener("keydown", keyDownStopPropagation, true);
   window.addEventListener("keydown", keyDownStopPropagation, true);
+  textAreaElement.addEventListener("keypress", keyDownStopPropagation);
+  document.body.addEventListener("keypress", keyDownStopPropagation, true);
+  window.addEventListener("keypress", keyDownStopPropagation, true);
 
   container.id = "___SHIFRONIM_WRAPPER___";
   contentContainer.appendChild(textAreaElement);
@@ -70,6 +73,9 @@ const removeShifronimTextField = () => {
   textAreaElement.removeEventListener("keydown", keyDownStopPropagation);
   document.body.removeEventListener("keydown", keyDownStopPropagation, true);
   window.removeEventListener("keydown", keyDownStopPropagation, true);
+  textAreaElement.removeEventListener("keypress", keyDownStopPropagation);
+  document.body.removeEventListener("keypress", keyDownStopPropagation, true);
+  window.removeEventListener("keypress", keyDownStopPropagation, true);
 
   container.remove();
 };
