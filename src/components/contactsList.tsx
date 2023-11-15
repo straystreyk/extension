@@ -1,4 +1,4 @@
-import { ChangeEvent, useEffect } from "react";
+import { ChangeEvent, useEffect, useMemo, useState } from "react";
 import { IContactItem, useAppStore } from "../helpers/store";
 import { useNavigate } from "react-router-dom";
 import { CustomIcon } from "./customIcon";
@@ -7,7 +7,16 @@ import { Tooltip } from "react-tooltip";
 
 export const ContactsList = () => {
   const { setContacts, contacts, isOn, setActiveContact } = useAppStore();
+  const [search, setSearch] = useState("");
   const navigate = useNavigate();
+
+  const filteredContacts = useMemo(
+    () =>
+      contacts.filter((item) =>
+        item.name.toLowerCase().startsWith(search.toLowerCase())
+      ),
+    [search, contacts]
+  );
 
   const deleteContact = async (item: IContactItem) => {
     if (confirm(`Вы действительно хотите удалить контакт ${item.name}`)) {
@@ -113,7 +122,6 @@ export const ContactsList = () => {
         <Tooltip id="export-contact-btn" />
         <Tooltip id="delete-item-btn" place="top" />
         <Tooltip id="edit-item-btn" place="top" />
-        <Tooltip id="copy-contact" place="top" />
         <h2>
           <button onClick={() => navigate("/")}>
             <CustomIcon icon="arrowLeft" />
@@ -156,58 +164,57 @@ export const ContactsList = () => {
       </div>
       <div className="contacts-list">
         {!contacts.length && <h2>Здесь еще нет контактов</h2>}
-        {!!contacts?.length &&
-          contacts.map((item) => {
-            return (
-              <div className="contacts-list-item">
-                <span>{item.name}</span>
-                <div className="contacts-list-item-btns">
-                  <button
-                    disabled={isOn}
-                    onClick={() => navigate(`/contacts/edit/${item.id}`)}
-                    data-tooltip-id="edit-item-btn"
-                    data-tooltip-content={
-                      isOn
-                        ? "Нельзя редактировать контакт пока расширение включено"
-                        : "Редактировать контакт"
-                    }
-                  >
-                    <CustomIcon icon="edit" />
-                  </button>
-                  <button
-                    data-tooltip-id="copy-contact"
-                    data-tooltip-content="Скопировать публичный ключ контакта"
-                    onClick={async () => {
-                      try {
-                        await navigator.clipboard.writeText(item.publicKey);
-                        toast.success("Публичный ключ успешно скопирован");
-                      } catch (e) {
-                        console.log(e);
-                        toast.error("Что-то пошло не так...");
-                      }
-                    }}
-                  >
-                    <CustomIcon icon="key" />
-                  </button>
-                  {!item.isDefault && (
+        {!!contacts?.length && (
+          <>
+            <input
+              type="text"
+              placeholder="Поиск контакта"
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+            />
+            {!filteredContacts.length && (
+              <h2 style={{ textAlign: "center" }}>
+                Контакт с таким именем не&nbsp;найден
+              </h2>
+            )}
+            {filteredContacts.map((item) => {
+              return (
+                <div className="contacts-list-item">
+                  <span>{item.name}</span>
+                  <div className="contacts-list-item-btns">
                     <button
-                      data-tooltip-id="delete-item-btn"
+                      disabled={isOn}
+                      onClick={() => navigate(`/contacts/edit/${item.id}`)}
+                      data-tooltip-id="edit-item-btn"
                       data-tooltip-content={
                         isOn
-                          ? "Нельзя удалить контакт контакт пока расширение включено"
-                          : "Удалить контакт"
+                          ? "Нельзя редактировать контакт пока расширение включено"
+                          : "Редактировать контакт"
                       }
-                      disabled={isOn}
-                      className="contacts-list-item-delete-btn"
-                      onClick={() => deleteContact(item)}
                     >
-                      <CustomIcon icon="trash" />
+                      <CustomIcon icon="edit" />
                     </button>
-                  )}
+                    {!item.isDefault && (
+                      <button
+                        data-tooltip-id="delete-item-btn"
+                        data-tooltip-content={
+                          isOn
+                            ? "Нельзя удалить контакт контакт пока расширение включено"
+                            : "Удалить контакт"
+                        }
+                        disabled={isOn}
+                        className="contacts-list-item-delete-btn"
+                        onClick={() => deleteContact(item)}
+                      >
+                        <CustomIcon icon="trash" />
+                      </button>
+                    )}
+                  </div>
                 </div>
-              </div>
-            );
-          })}
+              );
+            })}
+          </>
+        )}
       </div>
     </section>
   );

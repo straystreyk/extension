@@ -2,10 +2,10 @@ import { memo, useState } from "react";
 import { useAppStore } from "../helpers/store";
 import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
-import { copyPublicKey } from "../helpers/common";
 import { CustomIcon } from "./customIcon";
 import { Tooltip } from "react-tooltip";
 import { ContactsSection } from "./contactsSection";
+import { CreateContactWizard } from "./contactsCreateSteps/createContactWizard";
 
 export const MainSection = memo(() => {
   const {
@@ -64,14 +64,14 @@ export const MainSection = memo(() => {
       <Tooltip id="info-page" />
 
       <div className="turn-on-off-title">
-        <h2>Введите секретное слово и&nbsp;запустите Shifronim</h2>
-        <button
-          data-tooltip-id="copy-public"
-          data-tooltip-content="Скопировать собственный публичный ключ"
-          onClick={() => copyPublicKey()}
-        >
-          <CustomIcon icon="key" />
-        </button>
+        <h2>Выберите контакт и&nbsp;запустите Shifronim</h2>
+        {/*<button*/}
+        {/*  data-tooltip-id="copy-public"*/}
+        {/*  data-tooltip-content="Скопировать собственный публичный ключ"*/}
+        {/*  onClick={() => copyPublicKey()}*/}
+        {/*>*/}
+        {/*  <CustomIcon icon="key" />*/}
+        {/*</button>*/}
         <button
           data-tooltip-id="info-page"
           data-tooltip-content="Инструкция по использованию"
@@ -98,6 +98,7 @@ export const MainSection = memo(() => {
           Shifronim {isOn ? "включен" : "выключен"}
         </h4>
       </div>
+      <CreateContactWizard />
     </section>
   );
 });

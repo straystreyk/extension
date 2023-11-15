@@ -16,12 +16,16 @@ const activateShifronim = async (key: string) => {
       SHIFRONIM_MESSAGE_KEY: key,
     });
 
-    await chrome.tabs.sendMessage(tab.id as number, {
-      action: "START_SHIFR",
-    });
-    await chrome.action.setBadgeText({ text: "ON", tabId: tab.id });
+    if (tab.id) {
+      await chrome.tabs.sendMessage(tab.id, {
+        action: "START_SHIFR",
+      });
+      await chrome.action.setBadgeText({ text: "ON", tabId: tab.id });
 
-    return { success: true };
+      return { success: true };
+    } else {
+      return { success: false };
+    }
   } catch (e) {
     console.log(e.message, "from activateShifronim");
     return { success: false };
@@ -35,7 +39,7 @@ const deactivateShifronim = async () => {
       lastFocusedWindow: true,
     });
 
-    if (tab.id) {
+    if (tab?.id) {
       await chrome.action.setBadgeText({ text: "", tabId: tab.id });
       await chrome.tabs.sendMessage(tab.id as number, {
         action: "STOP_SHIFR",

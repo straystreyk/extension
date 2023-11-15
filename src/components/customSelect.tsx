@@ -1,5 +1,5 @@
 import { OutClick } from "./outClick";
-import { FC, useState } from "react";
+import { FC, useMemo, useState } from "react";
 import { CustomIcon } from "./customIcon";
 
 export interface ISelectItem {
@@ -23,16 +23,31 @@ export const CustomSelect: FC<ICustomSelect> = ({
   disabled,
 }) => {
   const [open, setOpen] = useState(false);
+  const [search, setSearch] = useState("");
+
+  const filteredItems = useMemo(
+    () =>
+      items.filter((item) =>
+        item.name.toLowerCase().startsWith(search.toLowerCase())
+      ),
+    [search, items]
+  );
 
   const onItemClick = (item: ISelectItem) => () => {
     onChange(item);
     setOpen(false);
+    setSearch("");
   };
+
+  if (!items) return null;
 
   return (
     <OutClick
       className={`custom-select ${disabled ? "custom-select-disabled" : ""}`}
-      onClick={() => setOpen(false)}
+      onClick={() => {
+        setOpen(false);
+        setSearch("");
+      }}
     >
       <div
         className="custom-select-name"
@@ -44,20 +59,28 @@ export const CustomSelect: FC<ICustomSelect> = ({
         <CustomIcon icon={open ? "arrowUp" : "arrowDown"} />
       </div>
       {open && (
-        <div className="custom-select-items">
-          {items.map((item, index) => {
-            return (
-              <div
-                onClick={onItemClick(item)}
-                title={item.name}
-                className="custom-select-item"
-                key={index}
-              >
-                <span>{item.name}</span>
-              </div>
-            );
-          })}
-        </div>
+        <>
+          <div className="custom-select-items">
+            <input
+              type="text"
+              value={search}
+              placeholder="Поиск"
+              onChange={(e) => setSearch(e.target.value)}
+            />
+            {filteredItems.map((item, index) => {
+              return (
+                <div
+                  onClick={onItemClick(item)}
+                  title={item.name}
+                  className="custom-select-item"
+                  key={index}
+                >
+                  <span>{item.name}</span>
+                </div>
+              );
+            })}
+          </div>
+        </>
       )}
     </OutClick>
   );

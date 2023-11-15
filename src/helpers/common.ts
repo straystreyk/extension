@@ -1,4 +1,6 @@
 import { toast } from "sonner";
+import { IWizard } from "../components/wizard";
+import { IWizardInfo } from "../components/contactsCreateSteps/createContactWizard";
 
 type TCopyTextOpts = {
   text: string;
@@ -41,5 +43,18 @@ export const copyPublicKey: (
     onSuccess && onSuccess();
   } catch (e) {
     onError && onError();
+  }
+};
+
+export const saveWizardState = async (state: {
+  info: IWizardInfo;
+  step: number;
+}) => {
+  try {
+    await chrome.storage.local.set({ SHIFRONIM_CONTACT_WIZARD_STATE: state });
+    return true;
+  } catch (e) {
+    console.log(e);
+    return false;
   }
 };

@@ -133,6 +133,7 @@ label {
 .contacts {
   margin-bottom: 8px;
   display: flex;
+  align-items: flex-start;
   gap: 8px;
 
   & button {
@@ -150,6 +151,7 @@ label {
   background: var(--SHIFRONIM_COLOR2);
   cursor: pointer;
   display: flex;
+  position: relative;
   justify-content: space-between;
   user-select: none;
 
@@ -182,6 +184,16 @@ label {
   max-height: 175px;
   z-index: 2;
   overflow: auto;
+  display: flex;
+  flex-direction: column;
+
+  & input {
+    flex-grow: 1;
+    background-color: var(--SHIFRONIM_COLOR3);
+    border-bottom-left-radius: 0;
+    border-bottom-right-radius: 0;
+    border-bottom: 1px solid var(--SHIFRONIM_COLOR4);
+  }
 }
 
 .custom-select-item {
@@ -263,6 +275,10 @@ label {
   display: flex;
   flex-direction: column;
   gap: 8px;
+
+  & input {
+    margin-bottom: 12px;
+  }
 }
 
 .contacts-list-item {
