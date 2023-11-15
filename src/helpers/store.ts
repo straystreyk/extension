@@ -3,7 +3,6 @@ import { create } from "zustand";
 export interface IContactItem {
   id: string;
   name: string;
-  publicKey: string;
   secretWord: string;
   isDefault?: boolean;
 }
@@ -20,7 +19,7 @@ interface Store {
 export const useAppStore = create<Store>((set) => ({
   isOn: false,
   contacts: [],
-  activeContact: { id: "", name: "", secretWord: "", publicKey: "" },
+  activeContact: { id: "", name: "", secretWord: "" },
 
   setIsOn: (isOn) => set(() => ({ isOn })),
   setContacts: (contacts) => set(() => ({ contacts })),

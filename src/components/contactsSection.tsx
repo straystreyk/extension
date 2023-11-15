@@ -12,8 +12,6 @@ export const ContactsSection = () => {
   const { isOn, contacts, setContacts, setActiveContact, activeContact } =
     useAppStore();
 
-  console.log(contacts);
-
   const items: ISelectItem[] = useMemo(
     () => contacts.map((item) => ({ value: item.id, ...item })),
     [contacts]
@@ -81,7 +79,7 @@ export const ContactsSection = () => {
           placeholder="Выберите из списка или создайте новый контакт"
           value={{
             name: activeContact?.name || "",
-            value: activeContact?.publicKey || "",
+            value: activeContact?.id || "",
           }}
           onChange={onChange}
           items={items}

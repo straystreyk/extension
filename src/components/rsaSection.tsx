@@ -4,26 +4,22 @@ import { CustomIcon } from "./customIcon";
 import { toast } from "sonner";
 import { Tooltip } from "react-tooltip";
 import { PasswordInput } from "./passwordInput";
-import { useAppStore } from "../helpers/store";
 
 export const RsaSection = memo(() => {
-  const { activeContact } = useAppStore();
   const [secretWord, setSecretWord] = useState("");
+  const [publicKey, setPublicKey] = useState("");
 
   return (
     <section className="section">
       <label>Публичный ключ собеседника</label>
       <div className="rsa-section-inputs">
         <div className="rsa-section-input-wrapper">
-          <Tooltip id="public-key-tooltip" place="top" />
           <input
             type="text"
             name="publicKey"
-            disabled
             placeholder="Вставьте публичный ключ"
-            value={activeContact?.publicKey}
-            data-tooltip-id="public-key-tooltip"
-            data-tooltip-content="Отредактировать публичный ключ можно через редактирование контактов"
+            value={publicKey}
+            onChange={(e) => setPublicKey(e.target.value)}
           />
         </div>
         <div>
@@ -49,7 +45,7 @@ export const RsaSection = memo(() => {
               data-tooltip-content="Зашифровать секретное слово"
               data-tooltip-id="encrypt-secret-word"
               onClick={() => {
-                if (!secretWord || !activeContact.publicKey)
+                if (!secretWord || !publicKey)
                   return toast.error(
                     "Введите публичный ключ и секретное слово"
                   );
@@ -57,7 +53,7 @@ export const RsaSection = memo(() => {
                 chrome.runtime.sendMessage(
                   {
                     action: "SHIFRONIM_ENCRYPT_RSA",
-                    publicKey: activeContact.publicKey.trim(),
+                    publicKey: publicKey.trim(),
                     secretWord: secretWord.trim(),
                   },
                   async (res) => {

@@ -9,12 +9,19 @@
 
 .turn-on-off-wrapper {
   display: flex;
+  flex-direction: column;
   width: 100%;
-  justify-content: space-between;
-  gap: 8px;
+  margin-top: 24px;
+  justify-content: center;
+  align-items: center;
+  gap: 24px;
 
   & input {
     flex-grow: 1;
+  }
+
+  & h4.active {
+    color: var(--SHIFRONIM_COLOR5);
   }
 }
 
@@ -39,6 +46,15 @@
 .turn-on-off-btn {
   display: flex;
   align-items: center;
+  width: 140px;
+  height: 140px;
+  border-radius: 50%;
+  justify-content: center;
+
+  & svg {
+    width: 60%;
+    height: 60%;
+  }
 }
 
 .turn-on-off-btn.active {
