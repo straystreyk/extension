@@ -46,10 +46,7 @@ export const copyPublicKey: (
   }
 };
 
-export const saveWizardState = async (state: {
-  info: IWizardInfo;
-  step: number;
-}) => {
+export const saveWizardState = async (state: IWizard<IWizardInfo>) => {
   try {
     await chrome.storage.local.set({ SHIFRONIM_CONTACT_WIZARD_STATE: state });
     return true;

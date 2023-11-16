@@ -19,6 +19,8 @@ import Unlock from "../assets/unlock.svg?react";
 import Info from "../assets/info.svg?react";
 import Lock from "../assets/lock.svg?react";
 import ArrowLeft from "../assets/arrowLeft.svg?react";
+import Cancel from "../assets/cancel.svg?react";
+import Checkmark from "../assets/checkmark.svg?react";
 
 type TIcon =
   | "on"
@@ -32,6 +34,7 @@ type TIcon =
   | "eyeOpen"
   | "key"
   | "unlock"
+  | "checkmark"
   | "newContact"
   | "contactsBook"
   | "download"
@@ -40,6 +43,7 @@ type TIcon =
   | "trash"
   | "lock"
   | "info"
+  | "cancel"
   | "cross";
 
 const iconsConfig: { [p in TIcon]: FC<{ className?: string }> } = {
@@ -62,7 +66,9 @@ const iconsConfig: { [p in TIcon]: FC<{ className?: string }> } = {
   trash: Trash,
   unlock: Unlock,
   lock: Lock,
+  checkmark: Checkmark,
   info: Info,
+  cancel: Cancel,
 };
 
 export const CustomIcon: FC<{ icon: TIcon; className?: string }> = ({

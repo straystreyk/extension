@@ -6,6 +6,7 @@ import { CustomIcon } from "./customIcon";
 import { Tooltip } from "react-tooltip";
 import { ContactsSection } from "./contactsSection";
 import { CreateContactWizard } from "./contactsCreateSteps/createContactWizard";
+import { copyPublicKey } from "../helpers/common";
 
 export const MainSection = memo(() => {
   const {
@@ -87,9 +88,6 @@ export const MainSection = memo(() => {
             disabled={loading}
             onClick={() => (isOn ? turnOff() : turnOn())}
             className={`turn-on-off-btn ${isOn ? "active" : ""}`}
-            // data-tooltip-content={
-            //   isOn ? "Выключить Shifronim" : "Включить Shifronim"
-            // }
           >
             <CustomIcon icon={isOn ? "off" : "on"} />
           </button>

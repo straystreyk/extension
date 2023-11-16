@@ -6,11 +6,18 @@ import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
 import { useAppStore } from "../helpers/store";
 import { v4 } from "uuid";
+import { nanoid } from "nanoid";
 
 export const ContactsSection = () => {
   const navigate = useNavigate();
-  const { isOn, contacts, setContacts, setActiveContact, activeContact } =
-    useAppStore();
+  const {
+    isOn,
+    contacts,
+    setContacts,
+    setActiveContact,
+    activeContact,
+    setIsWizardActive,
+  } = useAppStore();
 
   const items: ISelectItem[] = useMemo(
     () => contacts.map((item) => ({ value: item.id, ...item })),
@@ -41,8 +48,8 @@ export const ContactsSection = () => {
         const defaultContact = {
           id: v4(),
           name: "Контакт по умолчанию",
-          secretWord: "",
-          publicKey: "",
+          secretWord: nanoid(15),
+          prefix: nanoid(10),
           isDefault: true,
         };
 
@@ -87,7 +94,7 @@ export const ContactsSection = () => {
         <button
           data-tooltip-content="Создать контакт"
           data-tooltip-id="create-contact"
-          onClick={() => navigate("/contacts/create")}
+          onClick={() => setIsWizardActive(true)}
         >
           <CustomIcon icon="newContact" />
           <Tooltip id="create-contact" place="bottom" />

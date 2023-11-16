@@ -1,6 +1,7 @@
 import { memo, useEffect, useState } from "react";
 import { useAppStore } from "../helpers/store";
 import { MainSection } from "../components/mainSection";
+import { RsaSection } from "../components/rsaSection";
 
 export const MainPage = memo(() => {
   const { setIsOn } = useAppStore();
@@ -30,7 +31,10 @@ export const MainPage = memo(() => {
           На этой странице расширение&nbsp;недоступно
         </h2>
       ) : (
-        <MainSection />
+        <>
+          {/*<RsaSection />*/}
+          <MainSection />
+        </>
       )}
     </>
   );

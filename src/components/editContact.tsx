@@ -89,12 +89,12 @@ export const EditContact = () => {
           />
         </div>
         <div className="label-input-wrapper">
-          <label>Публичный ключ контакта</label>
+          <label>Префикс сообщений</label>
           <input
-            name="publicKey"
-            value={formState.publicKey}
+            name="prefix"
+            value={formState.prefix}
             required
-            placeholder="Публичный ключ контакта"
+            placeholder="Префикс сообщений"
             onChange={handleChange}
           />
         </div>

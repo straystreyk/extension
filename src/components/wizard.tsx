@@ -26,11 +26,13 @@ const Wizard = <T,>({
   initial,
   onResetWizard,
   initialForReset,
+  className,
 }: {
   children: ReactElement[];
   initial: IWizard<T>;
   initialForReset: IWizard<T>;
   onResetWizard?: () => void;
+  className?: string;
 }) => {
   const [opts, setOpts] = useState<IWizard<T>>(initial);
 
@@ -57,7 +59,7 @@ const Wizard = <T,>({
   if (!children) return null;
 
   return (
-    <div className="wizrd">
+    <div className={`wizard ${className || ""}`}>
       {cloneElement(children[opts.step], {
         wizardOptions: {
           ...opts,

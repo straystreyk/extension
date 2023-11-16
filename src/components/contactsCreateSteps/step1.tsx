@@ -19,21 +19,29 @@ export const Step1: FC<{
 
   return (
     <StepWrapper wizardOptions={wizardOptions}>
-      Введите имя контакта
-      <input
-        type="text"
-        value={wizardOptions.info.name}
-        onChange={(e) =>
-          setWizardOption((p) => ({
-            ...p,
-            info: { name: e.target.value, isSender: p.info.isSender },
-          }))
-        }
-      />
-      <div>
+      <h3 className="wizard-title">Шаг 1: Введите имя контакта</h3>
+      <label>Имя контакта</label>
+      <div className="rsa-section-input-wrapper">
+        <input
+          type="text"
+          value={wizardOptions.info.name}
+          placeholder="Введите имя контакта"
+          onChange={(e) =>
+            setWizardOption((p) => ({
+              ...p,
+              info: {
+                ...p.info,
+                name: e.target.value,
+                isSender: p.info.isSender,
+              } as IWizardInfo,
+            }))
+          }
+        />
+      </div>
+      <div className="wizard-main-btns">
         <button onClick={resetWizard}>Отменить</button>
         <button disabled={!wizardOptions.info.name} onClick={handleNext}>
-          следующий шаг
+          Далее
         </button>
       </div>
     </StepWrapper>

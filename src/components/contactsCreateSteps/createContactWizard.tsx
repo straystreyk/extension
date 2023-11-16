@@ -4,18 +4,29 @@ import { Step3 } from "./step3";
 import { Step4 } from "./step4";
 import Wizard from "../wizard";
 import { useEffect, useState } from "react";
+import { useAppStore } from "../../helpers/store";
 
 export interface IWizardInfo {
   name: string;
   isSender: boolean;
+  secretWord: string;
+  prefix: string;
+  encryptedText?: string;
 }
 
 const initial = {
   step: 0,
-  info: { name: "", isSender: true },
+  info: {
+    name: "",
+    isSender: true,
+    prefix: "",
+    secretWord: "",
+    encryptedText: "",
+  },
 };
 
 export const CreateContactWizard = () => {
+  const { isWizardActive, setIsWizardActive } = useAppStore();
   const [initialWizard, setInitialWizard] = useState(initial);
 
   useEffect(() => {
@@ -26,18 +37,22 @@ export const CreateContactWizard = () => {
 
       if (res.SHIFRONIM_CONTACT_WIZARD_STATE) {
         setInitialWizard(res.SHIFRONIM_CONTACT_WIZARD_STATE);
+        setIsWizardActive(true);
       }
     };
 
     resetInitial();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (
     <Wizard<IWizardInfo>
+      className={`create-contact-wizard ${isWizardActive ? "active" : ""}`}
       initial={initialWizard}
       initialForReset={initial}
-      onResetWizard={() => {
-        chrome.storage.local.remove(["SHIFRONIM_CONTACT_WIZARD_STATE"]);
+      onResetWizard={async () => {
+        await chrome.storage.local.remove(["SHIFRONIM_CONTACT_WIZARD_STATE"]);
+        setIsWizardActive(false);
       }}
     >
       <Step1 wizardOptions={undefined as never} />
