@@ -26,8 +26,8 @@ export const Step2: FC<{
 
   return (
     <StepWrapper wizardOptions={wizardOptions}>
-      <Tooltip id="wizard-sender" />
-      <Tooltip id="wizard-recipient" />
+      <Tooltip id="wizard-sender" place="right" />
+      <Tooltip id="wizard-recipient" place="right" />
       <h3 className="wizard-title">
         Шаг 2: Установить связь по обмену публичным ключом. Выберете каким
         способом вы планируете установить связь:

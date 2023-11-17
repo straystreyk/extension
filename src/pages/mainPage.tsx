@@ -1,7 +1,6 @@
 import { memo, useEffect, useState } from "react";
 import { useAppStore } from "../helpers/store";
 import { MainSection } from "../components/mainSection";
-import { RsaSection } from "../components/rsaSection";
 
 export const MainPage = memo(() => {
   const { setIsOn } = useAppStore();

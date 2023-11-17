@@ -16,6 +16,7 @@ textAreaElement.contentEditable = "true";
 button.setAttribute("part", "shifronim-content-button");
 button.classList.add("shifronim-content-button");
 button.innerText = "Зашифровать";
+const prefix = "!?!SHIFRONIM!?!";
 
 const keyDownStopPropagation = (e: KeyboardEvent) => {
   e.stopPropagation();
@@ -95,7 +96,7 @@ const replaceTextToInitial = () => {
 
 async function replaceTextInElement(element: HTMLElement) {
   if (element.nodeType === Node.TEXT_NODE) {
-    if (element?.textContent?.includes("!?!SHIFRONIM!?!")) {
+    if (element?.textContent?.includes(prefix)) {
       if (
         element?.parentElement?.isContentEditable ||
         ["INPUT", "TEXTAREA"].indexOf(

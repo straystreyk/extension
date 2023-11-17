@@ -41,7 +41,7 @@ const SenderStep3: FC<{
       </button>
       <div className="wizard-main-btns">
         <button onClick={prevStep}>Назад</button>
-        <button onClick={handleNext}>следующий шаг</button>
+        <button onClick={handleNext}>Далее</button>
       </div>
     </StepWrapper>
   );
@@ -101,6 +101,7 @@ const RecipientStep3: FC<{
         toast.error(
           "Произошла ошибка. Возможно вы передали неправильный публичный ключ"
         );
+        setValue("");
       }
     );
   };
