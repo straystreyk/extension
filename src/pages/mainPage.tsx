@@ -31,7 +31,6 @@ export const MainPage = memo(() => {
         </h2>
       ) : (
         <>
-          {/*<RsaSection />*/}
           <MainSection />
         </>
       )}

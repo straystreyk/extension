@@ -94,9 +94,9 @@ const replaceTextToInitial = () => {
   });
 };
 
-async function replaceTextInElement(element: HTMLElement) {
+async function replaceTextInElement(element: HTMLElement, pr: string = prefix) {
   if (element.nodeType === Node.TEXT_NODE) {
-    if (element?.textContent?.includes(prefix)) {
+    if (element?.textContent?.includes(pr)) {
       if (
         element?.parentElement?.isContentEditable ||
         ["INPUT", "TEXTAREA"].indexOf(
@@ -111,6 +111,7 @@ async function replaceTextInElement(element: HTMLElement) {
       const { text } = await chrome.runtime.sendMessage({
         action: "SHIFRONIM_DECRYPT",
         text: element.textContent,
+        prefix: pr,
       });
 
       if (text && element.parentElement) {
@@ -119,17 +120,17 @@ async function replaceTextInElement(element: HTMLElement) {
     }
   } else if (element.nodeType === Node.ELEMENT_NODE) {
     for (let i = 0; i < element.childNodes.length; i++) {
-      await replaceTextInElement(element.childNodes[i] as HTMLElement);
+      await replaceTextInElement(element.childNodes[i] as HTMLElement, pr);
     }
   }
 }
 
-function watchForDynamicContent() {
+function watchForDynamicContent(prefix: string) {
   observer = new MutationObserver(function (mutations) {
     mutations.forEach(function (mutation) {
       if (mutation.addedNodes.length > 0) {
         mutation.addedNodes.forEach(function (node) {
-          replaceTextInElement(node as HTMLElement);
+          replaceTextInElement(node as HTMLElement, prefix);
         });
       }
     });
@@ -141,8 +142,8 @@ function watchForDynamicContent() {
 chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
   if (request.action === "START_SHIFR" && !observer) {
     createShifronimTextField();
-    replaceTextInElement(document.body).then(() => {
-      watchForDynamicContent();
+    replaceTextInElement(document.body, request.prefix).then(() => {
+      watchForDynamicContent(request.prefix);
       sendResponse({ success: true });
     });
 

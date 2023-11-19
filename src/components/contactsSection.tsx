@@ -5,8 +5,6 @@ import { Tooltip } from "react-tooltip";
 import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
 import { useAppStore } from "../helpers/store";
-import { v4 } from "uuid";
-import { nanoid } from "nanoid";
 
 export const ContactsSection = () => {
   const navigate = useNavigate();
@@ -45,26 +43,8 @@ export const ContactsSection = () => {
           "SHIFRONIM_ACTIVE_CONTACT",
         ]);
 
-        const defaultContact = {
-          id: v4(),
-          name: "Контакт по умолчанию",
-          secretWord: nanoid(15),
-          prefix: nanoid(10),
-          isDefault: true,
-        };
-
         if (res?.SHIFRONIM_CONTACTS?.length) {
           setContacts(res.SHIFRONIM_CONTACTS);
-        } else {
-          await chrome.storage.local.set({
-            SHIFRONIM_CONTACTS: [defaultContact],
-            SHIFRONIM_ACTIVE_CONTACT: defaultContact,
-          });
-          setContacts([defaultContact]);
-
-          // eslint-disable-next-line @typescript-eslint/no-explicit-any
-          onChange(defaultContact as any);
-          return;
         }
 
         if (res.SHIFRONIM_ACTIVE_CONTACT)

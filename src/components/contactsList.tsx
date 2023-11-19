@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { CustomIcon } from "./customIcon";
 import { toast } from "sonner";
 import { Tooltip } from "react-tooltip";
+import { importContacts } from "../helpers/common";
 
 export const ContactsList = () => {
   const { setContacts, contacts, isOn, setActiveContact } = useAppStore();
@@ -70,41 +71,6 @@ export const ContactsList = () => {
     }
   };
 
-  const contactsImport = async (e: ChangeEvent<HTMLInputElement>) => {
-    const reader = new FileReader();
-    const file = e.target?.files?.[0];
-    if (!file) return;
-
-    reader.onload = async (event) => {
-      if (event.target?.result) {
-        try {
-          const json: IContactItem[] = JSON.parse(
-            event.target.result as string
-          );
-          const defaultContact = json.find((item) => item.isDefault);
-
-          await chrome.storage.local.set({
-            SHIFRONIM_CONTACTS: json,
-            SHIFRONIM_ACTIVE_CONTACT: defaultContact,
-          });
-
-          setContacts(json);
-
-          if (defaultContact) {
-            setActiveContact(defaultContact);
-          }
-        } catch (e) {
-          console.log(e.message);
-          toast.error("Что-то пошло не так...");
-        }
-
-        toast.success("Контакты успешно импортированы");
-      }
-    };
-
-    reader.readAsText(file);
-  };
-
   useEffect(() => {
     const getContacts = async () => {
       const res = await chrome.storage.local.get(["SHIFRONIM_CONTACTS"]);
@@ -144,7 +110,7 @@ export const ContactsList = () => {
           </label>
           <input
             disabled={isOn}
-            onChange={contactsImport}
+            onChange={importContacts}
             className="contact-import-input"
             type="file"
             multiple={false}

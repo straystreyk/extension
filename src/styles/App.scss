@@ -286,7 +286,7 @@ label {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 0 0 0 24px;
+  padding: 0 0 0 16px;
   background-color: var(--SHIFRONIM_COLOR2);
   transition: 0.2s all ease;
 
@@ -416,9 +416,14 @@ label {
 
 .create-contact-wizard {
   display: none;
+  overflow: auto;
 
   &.active {
     display: block;
+  }
+
+  &.no-contacts {
+    min-height: 225px;
   }
 }
 
@@ -482,4 +487,19 @@ label {
   justify-content: center;
   align-items: center;
   gap: 8px;
+}
+
+.no-contacts-section {
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+
+  & button,
+  & label {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin: 0;
+    font-size: 14px;
+  }
 }

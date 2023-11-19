@@ -6,7 +6,7 @@ import { CustomIcon } from "./customIcon";
 import { Tooltip } from "react-tooltip";
 import { ContactsSection } from "./contactsSection";
 import { CreateContactWizard } from "./contactsCreateSteps/createContactWizard";
-import { copyPublicKey } from "../helpers/common";
+import { importContacts } from "../helpers/common";
 
 export const MainSection = memo(() => {
   const {
@@ -16,26 +16,29 @@ export const MainSection = memo(() => {
     setActiveContact,
     setContacts,
     contacts,
+    setIsWizardActive,
   } = useAppStore();
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
+  const isContactsExists = contacts.length > 0;
 
-  const turnOn = () => {
+  const turnOn = async () => {
     setLoading(true);
+    const newContacts = contacts.map((item) =>
+      item.id === activeContact.id ? activeContact : item
+    );
+
+    await chrome.storage.local.set({
+      SHIFRONIM_ACTIVE_CONTACT: activeContact,
+      SHIFRONIM_CONTACTS: newContacts,
+    });
+
     chrome.runtime.sendMessage(
       { action: "SHIFRONIM_ACTIVATE", key: activeContact.secretWord },
       async (res) => {
         if (res.success) {
           toast.success("Shifronim активирован");
           setIsOn(true);
-          const newContacts = contacts.map((item) =>
-            item.id === activeContact.id ? activeContact : item
-          );
-
-          await chrome.storage.local.set({
-            SHIFRONIM_ACTIVE_CONTACT: activeContact,
-            SHIFRONIM_CONTACTS: newContacts,
-          });
 
           setContacts(newContacts);
           setActiveContact(activeContact);
@@ -63,16 +66,14 @@ export const MainSection = memo(() => {
     <section>
       <Tooltip id="copy-public" />
       <Tooltip id="info-page" />
-
       <div className="turn-on-off-title">
-        <h2>Выберите контакт и&nbsp;запустите Shifronim</h2>
-        {/*<button*/}
-        {/*  data-tooltip-id="copy-public"*/}
-        {/*  data-tooltip-content="Скопировать собственный публичный ключ"*/}
-        {/*  onClick={() => copyPublicKey()}*/}
-        {/*>*/}
-        {/*  <CustomIcon icon="key" />*/}
-        {/*</button>*/}
+        <h2
+          dangerouslySetInnerHTML={{
+            __html: isContactsExists
+              ? "Выберите контакт и&nbsp;запустите Shifronim"
+              : "Для работы с Shifronim создайте или импортируйте контакты",
+          }}
+        />
         <button
           data-tooltip-id="info-page"
           data-tooltip-content="Инструкция по использованию"
@@ -81,21 +82,53 @@ export const MainSection = memo(() => {
           <CustomIcon icon="info" />
         </button>
       </div>
-      <ContactsSection />
-      <div className="turn-on-off-wrapper">
-        {activeContact.secretWord && (
-          <button
-            disabled={loading}
-            onClick={() => (isOn ? turnOff() : turnOn())}
-            className={`turn-on-off-btn ${isOn ? "active" : ""}`}
-          >
-            <CustomIcon icon={isOn ? "off" : "on"} />
-          </button>
-        )}
-        <h4 className={`${isOn ? "active" : ""}`}>
-          Shifronim {isOn ? "включен" : "выключен"}
-        </h4>
+      <div style={{ display: !isContactsExists ? "none" : "block" }}>
+        <ContactsSection />
       </div>
+      {isContactsExists ? (
+        <>
+          <div className="turn-on-off-wrapper">
+            <button
+              disabled={loading || !activeContact.secretWord}
+              onClick={() => (isOn ? turnOff() : turnOn())}
+              className={`turn-on-off-btn ${isOn ? "active" : ""}`}
+            >
+              <CustomIcon icon={isOn ? "off" : "on"} />
+            </button>
+            <h4 className={`${isOn ? "active" : ""}`}>
+              Shifronim {isOn ? "включен" : "выключен"}
+            </h4>
+          </div>
+        </>
+      ) : (
+        <div className="no-contacts-section">
+          <Tooltip id="contact-import-btn" />
+          <button onClick={() => setIsWizardActive(true)}>
+            Создать контакт <CustomIcon icon="newContact" />
+          </button>
+          <label
+            id="contact-import-btn"
+            htmlFor="contact-import"
+            className="button download-btn"
+            data-tooltip-id="edit-item-btn"
+            data-tooltip-content={
+              isOn
+                ? "Нельзя импортировать контакты пока расширение включено"
+                : "Импортировать контакты"
+            }
+          >
+            Импортировать контакты <CustomIcon icon="import" />
+          </label>
+          <input
+            onChange={importContacts}
+            className="contact-import-input"
+            type="file"
+            multiple={false}
+            accept="application/json"
+            id="contact-import"
+          />
+        </div>
+      )}
       <CreateContactWizard />
     </section>
   );

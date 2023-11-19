@@ -15,10 +15,13 @@ const activateShifronim = async (key: string) => {
       SHIFRONIM_IS_ACTIVE: true,
       SHIFRONIM_MESSAGE_KEY: key,
     });
+    const res = await chrome.storage.local.get(["SHIFRONIM_ACTIVE_CONTACT"]);
+    if (!res.SHIFRONIM_ACTIVE_CONTACT) return { success: false };
 
     if (tab.id) {
       await chrome.tabs.sendMessage(tab.id, {
         action: "START_SHIFR",
+        prefix: res.SHIFRONIM_ACTIVE_CONTACT.prefix,
       });
       await chrome.action.setBadgeText({ text: "ON", tabId: tab.id });
 
@@ -68,12 +71,13 @@ const checkForActive = async () => {
     });
 };
 
-const decryptMessage = async (text: string) => {
+const decryptMessage = async (text: string, prefix: string) => {
   const res = await chrome.storage.local.get(["SHIFRONIM_MESSAGE_KEY"]);
 
   if (!res.SHIFRONIM_MESSAGE_KEY) return "";
+  const regex = new RegExp(`${prefix}`, "");
+  const replaced = text.replace(regex, "");
 
-  const replaced = text.replace(/!\?!SHIFRONIM!\?!/g, "");
   if (!replaced) return "";
 
   try {
@@ -87,14 +91,17 @@ const decryptMessage = async (text: string) => {
   }
 };
 const encryptMessage = async (text: string) => {
-  const res = await chrome.storage.local.get(["SHIFRONIM_MESSAGE_KEY"]);
-  if (!res.SHIFRONIM_MESSAGE_KEY) return "";
+  const res = await chrome.storage.local.get([
+    "SHIFRONIM_MESSAGE_KEY",
+    "SHIFRONIM_ACTIVE_CONTACT",
+  ]);
+  if (!res.SHIFRONIM_MESSAGE_KEY || !res.SHIFRONIM_ACTIVE_CONTACT) return "";
 
   const encrypted = cryptoJS.AES.encrypt(
     JSON.stringify({ text }),
     res.SHIFRONIM_MESSAGE_KEY
   ).toString();
-  return "!?!SHIFRONIM!?!" + encrypted;
+  return res.SHIFRONIM_ACTIVE_CONTACT.prefix + encrypted;
 };
 
 chrome.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
@@ -140,7 +147,7 @@ chrome.runtime.onInstalled.addListener(async () => {
 
 chrome.runtime.onMessage.addListener((msg, sender, sendResponse) => {
   if (msg.action === "SHIFRONIM_DECRYPT") {
-    decryptMessage(msg.text).then((replaced) => {
+    decryptMessage(msg.text, msg.prefix).then((replaced) => {
       sendResponse({ text: replaced || "" });
     });
   }

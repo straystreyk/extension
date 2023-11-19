@@ -26,7 +26,7 @@ const initial = {
 };
 
 export const CreateContactWizard = () => {
-  const { isWizardActive, setIsWizardActive } = useAppStore();
+  const { isWizardActive, setIsWizardActive, contacts } = useAppStore();
   const [initialWizard, setInitialWizard] = useState(initial);
 
   useEffect(() => {
@@ -47,7 +47,9 @@ export const CreateContactWizard = () => {
 
   return (
     <Wizard<IWizardInfo>
-      className={`create-contact-wizard ${isWizardActive ? "active" : ""}`}
+      className={`create-contact-wizard ${isWizardActive ? "active" : ""} ${
+        contacts.length < 1 ? "no-contacts" : ""
+      }`}
       initial={initialWizard}
       initialForReset={initial}
       onResetWizard={async () => {
