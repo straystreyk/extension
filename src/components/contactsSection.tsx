@@ -72,8 +72,9 @@ export const ContactsSection = () => {
           items={items}
         />
         <button
-          data-tooltip-content="Создать контакт"
+          data-tooltip-content={"Создать контакт"}
           data-tooltip-id="create-contact"
+          disabled={isOn}
           onClick={() => setIsWizardActive(true)}
         >
           <CustomIcon icon="newContact" />
@@ -82,6 +83,7 @@ export const ContactsSection = () => {
         <button
           data-tooltip-content="Контакты"
           data-tooltip-id="contacts"
+          disabled={isOn}
           onClick={() => navigate("/contacts")}
         >
           <CustomIcon icon="contactsBook" />

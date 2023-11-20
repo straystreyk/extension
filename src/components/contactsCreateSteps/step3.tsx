@@ -23,7 +23,7 @@ const SenderStep3: FC<{
   return (
     <StepWrapper wizardOptions={wizardOptions}>
       <h3 className="wizard-title">
-        Шаг 3: Скопируйте свой ключ, нажав на иконку и перешлите свой ключ
+        Шаг 3: Скопируйте свой ключ, нажав на кнопку и перешлите его
         собеседнику.{" "}
         <span className="red">
           Внимание: для пересылки ключа не рекомендуется использовать тот же
