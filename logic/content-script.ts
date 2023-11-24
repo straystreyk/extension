@@ -70,13 +70,13 @@ const createShifronimTextField = () => {
   document.body.prepend(container);
 };
 const removeShifronimTextField = () => {
-  button.removeEventListener("click", btnClick);
-  textAreaElement.removeEventListener("keydown", keyDownStopPropagation);
-  document.body.removeEventListener("keydown", keyDownStopPropagation, true);
-  window.removeEventListener("keydown", keyDownStopPropagation, true);
-  textAreaElement.removeEventListener("keypress", keyDownStopPropagation);
-  document.body.removeEventListener("keypress", keyDownStopPropagation, true);
-  window.removeEventListener("keypress", keyDownStopPropagation, true);
+  button?.removeEventListener("click", btnClick);
+  textAreaElement?.removeEventListener("keydown", keyDownStopPropagation);
+  document?.body?.removeEventListener("keydown", keyDownStopPropagation, true);
+  window?.removeEventListener("keydown", keyDownStopPropagation, true);
+  textAreaElement?.removeEventListener("keypress", keyDownStopPropagation);
+  document?.body?.removeEventListener("keypress", keyDownStopPropagation, true);
+  window?.removeEventListener("keypress", keyDownStopPropagation, true);
 
   container.remove();
 };
