@@ -8,10 +8,10 @@
     "default_popup": "popup.html"
   },
   "icons": {
-    "16": "./favicones/16.png",
-    "32": "./favicones/32.png",
-    "48": "./favicones/48.png",
-    "128": "./favicones/128.png"
+    "16": "./favicons/16.png",
+    "32": "./favicons/32.png",
+    "48": "./favicons/48.png",
+    "128": "./favicons/128.png"
   },
   "permissions": [
     "storage",
