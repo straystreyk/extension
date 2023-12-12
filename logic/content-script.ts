@@ -84,6 +84,7 @@ const removeShifronimTextField = () => {
 const replaceTextToInitial = () => {
   const allEncrypted = document.querySelectorAll("[data-shifronim-encrypted]");
   allEncrypted.forEach((item: HTMLDivElement) => {
+    item.classList.remove("SHIFRONIM_ENCRYPTED_MESSAGE");
     for (let i = 0; i < item.childNodes.length; i++) {
       if (item.childNodes[i].nodeType === Node.TEXT_NODE) {
         item.childNodes[i].textContent = item.dataset
@@ -104,7 +105,9 @@ async function replaceTextInElement(element: HTMLElement, pr: string = prefix) {
         ) >= 0
       )
         return;
-
+      (element?.parentElement as HTMLElement).classList.add(
+        "SHIFRONIM_ENCRYPTED_MESSAGE"
+      );
       (element.parentElement as HTMLElement).dataset.shifronimEncrypted =
         element.textContent;
 

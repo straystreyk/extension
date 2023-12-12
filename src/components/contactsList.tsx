@@ -20,7 +20,7 @@ export const ContactsList = () => {
   );
 
   const deleteContact = async (item: IContactItem) => {
-    if (confirm(`Вы действительно хотите удалить контакт ${item.name}`)) {
+    if (confirm(`Вы действительно хотите удалить контакт ${item.name}?`)) {
       try {
         let contactToDeleteId = undefined;
         let defaultContact = undefined;
