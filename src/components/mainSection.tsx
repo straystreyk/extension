@@ -37,7 +37,7 @@ export const MainSection = memo(() => {
       { action: "SHIFRONIM_ACTIVATE", key: activeContact.secretWord },
       async (res) => {
         if (res.success) {
-          toast.success("Shifronim активирован");
+          toast.success("Shifronim включен");
           setIsOn(true);
 
           setContacts(newContacts);

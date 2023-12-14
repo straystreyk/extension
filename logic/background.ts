@@ -11,14 +11,23 @@ const activateShifronim = async (key: string) => {
       active: true,
       currentWindow: true,
     });
-    await chrome.storage.local.set({
-      SHIFRONIM_IS_ACTIVE: true,
-      SHIFRONIM_MESSAGE_KEY: key,
-    });
-    const res = await chrome.storage.local.get(["SHIFRONIM_ACTIVE_CONTACT"]);
+
+    const res = await chrome.storage.local.get([
+      "SHIFRONIM_ACTIVE_CONTACT",
+      "SHIFRONIM_ACTIVE_TABS",
+    ]);
     if (!res.SHIFRONIM_ACTIVE_CONTACT) return { success: false };
 
+    // табы где включен шифроним
+    const activeTabs = res?.SHIFRONIM_ACTIVE_TABS
+      ? res.SHIFRONIM_ACTIVE_TABS
+      : {};
+
     if (tab.id) {
+      await chrome.storage.local.set({
+        SHIFRONIM_MESSAGE_KEY: key,
+        SHIFRONIM_ACTIVE_TABS: { ...activeTabs, [tab.id]: { active: true } },
+      });
       await chrome.tabs.sendMessage(tab.id, {
         action: "START_SHIFR",
         prefix: res.SHIFRONIM_ACTIVE_CONTACT.prefix,
@@ -44,14 +53,12 @@ const deactivateShifronim = async () => {
 
     if (tab?.id) {
       await chrome.action.setBadgeText({ text: "", tabId: tab.id });
+      await deleteTabInfo(tab.id);
       await chrome.tabs.sendMessage(tab.id as number, {
         action: "STOP_SHIFR",
       });
     }
 
-    await chrome.storage.local.set({
-      SHIFRONIM_IS_ACTIVE: false,
-    });
     return { success: true };
   } catch (e) {
     console.log(e.message, "from deactivateShifronim");
@@ -59,13 +66,13 @@ const deactivateShifronim = async () => {
   }
 };
 
-const checkForActive = async () => {
+const checkForActive = async (tabId: number) => {
   chrome.storage.local
-    .get(["SHIFRONIM_IS_ACTIVE", "SHIFRONIM_MESSAGE_KEY"])
+    .get(["SHIFRONIM_ACTIVE_TABS", "SHIFRONIM_MESSAGE_KEY"])
     .then((res) => {
-      if (!res.SHIFRONIM_IS_ACTIVE) return deactivateShifronim();
+      if (!res.SHIFRONIM_ACTIVE_TABS) return;
 
-      if (res.SHIFRONIM_IS_ACTIVE && res.SHIFRONIM_MESSAGE_KEY) {
+      if (res.SHIFRONIM_ACTIVE_TABS[tabId] && res.SHIFRONIM_MESSAGE_KEY) {
         activateShifronim(res.SHIFRONIM_MESSAGE_KEY);
       }
     });
@@ -104,13 +111,29 @@ const encryptMessage = async (text: string) => {
   return res.SHIFRONIM_ACTIVE_CONTACT.prefix + encrypted;
 };
 
+const deleteTabInfo = async (tabId: number) => {
+  const res = await chrome.storage.local.get(["SHIFRONIM_ACTIVE_TABS"]);
+
+  if (!res.SHIFRONIM_ACTIVE_TABS) return;
+  const obj = { ...res.SHIFRONIM_ACTIVE_TABS };
+  delete obj[tabId];
+
+  await chrome.storage.local.set({
+    SHIFRONIM_ACTIVE_TABS: obj,
+  });
+};
+
+chrome.tabs.onRemoved.addListener(async (tabId) => {
+  await deleteTabInfo(tabId);
+});
+
 chrome.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
-  if (tab.url) checkForActive();
+  if (tab.url) checkForActive(tabId);
 });
 
 chrome.tabs.onActivated.addListener((activeInfo) => {
   chrome.tabs.get(activeInfo.tabId).then((tab) => {
-    if (tab.url) checkForActive();
+    if (tab.url) checkForActive(activeInfo.tabId);
   });
 
   return true;
@@ -175,6 +198,19 @@ chrome.runtime.onMessage.addListener((msg, sender, sendResponse) => {
     decryptRSAMessage(msg.encryptedSecretWord)
       .then(async (text) => {
         sendResponse({ success: true, text });
+      })
+      .catch(() => sendResponse({ success: false }));
+  }
+
+  if (msg.action === "GET_TAB_INFO") {
+    chrome.tabs
+      .query({ active: true, currentWindow: true })
+      .then(async (tab) => {
+        if (tab[0]) {
+          sendResponse({ success: true, tab: tab[0] });
+        } else {
+          sendResponse({ success: false });
+        }
       })
       .catch(() => sendResponse({ success: false }));
   }

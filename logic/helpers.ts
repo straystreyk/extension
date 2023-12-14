@@ -1,5 +1,10 @@
 // Генерация пары ключей и сохранение их в storage
 export const generateAndStoreKeyPairs = async () => {
+  const res = await chrome.storage.local.get(["publicKey", "privateKey"]);
+
+  // если ключи уже сгенерированы, то не надо генерировать их заново
+  if (res.publicKey && res.privateKey) return;
+
   try {
     // Генерируем пару ключей для шифрования и расшифровки
     const encryptionKeyPair = await self.crypto.subtle.generateKey(

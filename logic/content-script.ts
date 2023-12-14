@@ -1,4 +1,5 @@
 let observer: MutationObserver | undefined = undefined;
+const prefix = "!?!SHIFRONIM!?!";
 const container = document.createElement("div");
 const shadowRoot = container?.attachShadow({
   mode: "open",
@@ -6,6 +7,7 @@ const shadowRoot = container?.attachShadow({
 });
 const contentContainer = document.createElement("div");
 const textAreaElement = document.createElement("div");
+const hideTextAreaBtn = document.createElement("button");
 const button = document.createElement("button");
 
 contentContainer.setAttribute("part", "shifronim-content-div");
@@ -16,10 +18,25 @@ textAreaElement.contentEditable = "true";
 button.setAttribute("part", "shifronim-content-button");
 button.classList.add("shifronim-content-button");
 button.innerText = "Зашифровать";
-const prefix = "!?!SHIFRONIM!?!";
+hideTextAreaBtn.innerHTML =
+  '<svg part="hide-textarea-btn-svg" xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24"><path fill="currentColor" d="m12 10.8l-3.9 3.9q-.275.275-.7.275t-.7-.275q-.275-.275-.275-.7t.275-.7l4.6-4.6q.3-.3.7-.3t.7.3l4.6 4.6q.275.275.275.7t-.275.7q-.275.275-.7.275t-.7-.275z"/></svg>';
+hideTextAreaBtn.setAttribute("part", "hide-textarea-btn");
 
 const keyDownStopPropagation = (e: KeyboardEvent) => {
   e.stopPropagation();
+};
+
+const handleHideTextField = async () => {
+  const shifronimApp = document.getElementById("___SHIFRONIM_WRAPPER___");
+  if (!shifronimApp) return;
+
+  const isHidden = shifronimApp.classList.contains("___SHIFRONIM_HIDDEN___");
+
+  await chrome.storage.local.set({
+    SHIFRONIM_TEXT_FIELD_HIDDEN: !isHidden,
+  });
+
+  shifronimApp.classList.toggle("___SHIFRONIM_HIDDEN___");
 };
 
 const btnClick = async () => {
@@ -48,29 +65,37 @@ const btnClick = async () => {
   textAreaElement.innerText = "";
 };
 
-const createShifronimTextField = () => {
+const createShifronimTextField = async () => {
   const shifronimApp = document.getElementById("___SHIFRONIM_WRAPPER___");
   const shifronimAlreadyInPage = !!shifronimApp;
   if (shifronimAlreadyInPage) shifronimApp.remove();
 
-  button.addEventListener("click", btnClick);
-  textAreaElement.addEventListener("keydown", keyDownStopPropagation);
-  document.body.addEventListener("keydown", keyDownStopPropagation, true);
-  window.addEventListener("keydown", keyDownStopPropagation, true);
-  textAreaElement.addEventListener("keypress", keyDownStopPropagation);
-  document.body.addEventListener("keypress", keyDownStopPropagation, true);
-  window.addEventListener("keypress", keyDownStopPropagation, true);
+  const res = await chrome.storage.local.get(["SHIFRONIM_TEXT_FIELD_HIDDEN"]);
+
+  if (res.SHIFRONIM_TEXT_FIELD_HIDDEN === true)
+    container.classList.add("___SHIFRONIM_HIDDEN___");
+
+  button?.addEventListener("click", btnClick);
+  hideTextAreaBtn?.addEventListener("click", handleHideTextField);
+  textAreaElement?.addEventListener("keydown", keyDownStopPropagation);
+  document.body?.addEventListener("keydown", keyDownStopPropagation, true);
+  window?.addEventListener("keydown", keyDownStopPropagation, true);
+  textAreaElement?.addEventListener("keypress", keyDownStopPropagation);
+  document.body?.addEventListener("keypress", keyDownStopPropagation, true);
+  window?.addEventListener("keypress", keyDownStopPropagation, true);
 
   container.id = "___SHIFRONIM_WRAPPER___";
+  contentContainer.appendChild(hideTextAreaBtn);
   contentContainer.appendChild(textAreaElement);
   contentContainer.appendChild(button);
 
   shadowRoot.appendChild(contentContainer);
 
-  document.body.prepend(container);
+  document.body?.prepend(container);
 };
 const removeShifronimTextField = () => {
   button?.removeEventListener("click", btnClick);
+  hideTextAreaBtn?.removeEventListener("click", handleHideTextField);
   textAreaElement?.removeEventListener("keydown", keyDownStopPropagation);
   document?.body?.removeEventListener("keydown", keyDownStopPropagation, true);
   window?.removeEventListener("keydown", keyDownStopPropagation, true);
@@ -86,7 +111,7 @@ const replaceTextToInitial = () => {
   allEncrypted.forEach((item: HTMLDivElement) => {
     item.classList.remove("SHIFRONIM_ENCRYPTED_MESSAGE");
     for (let i = 0; i < item.childNodes.length; i++) {
-      if (item.childNodes[i].nodeType === Node.TEXT_NODE) {
+      if (item?.childNodes[i]?.nodeType === Node.TEXT_NODE) {
         item.childNodes[i].textContent = item.dataset
           .shifronimEncrypted as string;
       }
@@ -96,7 +121,7 @@ const replaceTextToInitial = () => {
 };
 
 async function replaceTextInElement(element: HTMLElement, pr: string = prefix) {
-  if (element.nodeType === Node.TEXT_NODE) {
+  if (element?.nodeType === Node.TEXT_NODE) {
     if (element?.textContent?.includes(pr)) {
       if (
         element?.parentElement?.isContentEditable ||
@@ -121,7 +146,7 @@ async function replaceTextInElement(element: HTMLElement, pr: string = prefix) {
         element.textContent = text;
       }
     }
-  } else if (element.nodeType === Node.ELEMENT_NODE) {
+  } else if (element?.nodeType === Node.ELEMENT_NODE) {
     for (let i = 0; i < element.childNodes.length; i++) {
       await replaceTextInElement(element.childNodes[i] as HTMLElement, pr);
     }

@@ -10,13 +10,18 @@ export const MainPage = memo(() => {
 
   useEffect(() => {
     const checkForActive = async () => {
-      chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
-        const url = tabs?.[0].url || "";
+      chrome.tabs.query({ active: true, currentWindow: true }, async (tabs) => {
+        const activeTab = tabs?.[0];
+        const url = activeTab.url || "";
         setUrl(url);
-      });
-      const res = await chrome.storage.local.get(["SHIFRONIM_IS_ACTIVE"]);
+        const res = await chrome.storage.local.get(["SHIFRONIM_ACTIVE_TABS"]);
 
-      setIsOn(!!res.SHIFRONIM_IS_ACTIVE);
+        if (!res.SHIFRONIM_ACTIVE_TABS || !activeTab.id) return;
+
+        res.SHIFRONIM_ACTIVE_TABS[activeTab?.id]
+          ? setIsOn(true)
+          : setIsOn(false);
+      });
     };
 
     checkForActive();
