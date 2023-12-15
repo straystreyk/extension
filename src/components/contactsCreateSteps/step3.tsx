@@ -109,7 +109,7 @@ const RecipientStep3: FC<{
   return (
     <StepWrapper wizardOptions={wizardOptions}>
       <h3 className="wizard-title">
-        Шаг 3: Вствьте публичный ключ, полученный от собеседника.
+        Шаг 3: Вставьте публичный ключ, полученный от собеседника.
       </h3>
       <div className="rsa-section-input-wrapper">
         <textarea

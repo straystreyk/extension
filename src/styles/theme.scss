@@ -1,11 +1,13 @@
 @import url("https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&display=swap");
 
+$SHIFRONIM_COLOR5: hsl(150, 86%, 65%);
+
 :root {
   --SHIFRONIM_COLOR1: #090909;
   --SHIFRONIM_COLOR2: #212121;
   --SHIFRONIM_COLOR3: #181818;
   --SHIFRONIM_COLOR4: #6e6e6e;
-  --SHIFRONIM_COLOR5: hsl(150, 86%, 65%);
+  --SHIFRONIM_COLOR5: #{$SHIFRONIM_COLOR5};
   --SHIFRONIM_COLOR6: #dd5e5e;
   --SHIFRONIM_WHITE: #ffffff;
 

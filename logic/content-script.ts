@@ -163,7 +163,7 @@ function watchForDynamicContent(prefix: string) {
       }
     });
   });
-
+  if (!document.body) return;
   observer.observe(document.body, { childList: true, subtree: true });
 }
 
