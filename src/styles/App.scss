@@ -60,11 +60,16 @@ p {
     width: 60%;
     height: 60%;
   }
+
+  &:hover {
+    background: var(--SHIFRONIM_COLOR3);
+    color: var(--SHIFRONIM_WHITE);
+    box-shadow: 0 0 3px var(--SHIFRONIM_COLOR5);
+  }
 }
 
 .turn-on-off-btn.active {
-  background: var(--SHIFRONIM_WHITE);
-  color: var(--SHIFRONIM_COLOR1);
+  color: var(--SHIFRONIM_COLOR5);
 }
 
 label {

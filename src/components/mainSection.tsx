@@ -54,7 +54,9 @@ export const MainSection = memo(() => {
       { action: "SHIFRONIM_DEACTIVATE" },
       async (res) => {
         if (res.success) {
-          toast.success("Shifronim выключен");
+          toast.success("Shifronim выключен", {
+            icon: <CustomIcon icon="cross" />,
+          });
           setIsOn(false);
         }
         setLoading(false);
@@ -93,7 +95,7 @@ export const MainSection = memo(() => {
               onClick={() => (isOn ? turnOff() : turnOn())}
               className={`turn-on-off-btn ${isOn ? "active" : ""}`}
             >
-              <CustomIcon icon={isOn ? "off" : "on"} />
+              <CustomIcon icon="on" />
             </button>
             <h4 className={`${isOn ? "active" : ""}`}>
               Shifronim {isOn ? "включен" : "выключен"}

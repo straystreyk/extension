@@ -25,13 +25,19 @@ export const CustomSelect: FC<ICustomSelect> = ({
   const [open, setOpen] = useState(false);
   const [search, setSearch] = useState("");
 
-  const filteredItems = useMemo(
-    () =>
-      items.filter((item) =>
+  const filteredItems = useMemo(() => {
+    let finalItems = [
+      ...items.sort((item1, item2) => item1.name.localeCompare(item2.name)),
+    ];
+
+    if (search) {
+      finalItems = finalItems.filter((item) =>
         item.name.toLowerCase().startsWith(search.toLowerCase())
-      ),
-    [search, items]
-  );
+      );
+    }
+
+    return finalItems;
+  }, [search, items]);
 
   const onItemClick = (item: ISelectItem) => () => {
     onChange(item);

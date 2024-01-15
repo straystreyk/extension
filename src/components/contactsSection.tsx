@@ -72,7 +72,11 @@ export const ContactsSection = () => {
           items={items}
         />
         <button
-          data-tooltip-content={"Создать контакт"}
+          data-tooltip-content={
+            isOn
+              ? "Выключите Shifronim, чтобы создать новый контакт"
+              : "Создать контакт"
+          }
           data-tooltip-id="create-contact"
           disabled={isOn}
           onClick={() => setIsWizardActive(true)}
@@ -81,7 +85,11 @@ export const ContactsSection = () => {
           <Tooltip id="create-contact" place="bottom" />
         </button>
         <button
-          data-tooltip-content="Контакты"
+          data-tooltip-content={
+            isOn
+              ? "Выключите Shifronim, чтобы перейти на страницу контактов"
+              : "Контакты"
+          }
           data-tooltip-id="contacts"
           disabled={isOn}
           onClick={() => navigate("/contacts")}

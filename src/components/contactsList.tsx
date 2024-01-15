@@ -1,4 +1,4 @@
-import { ChangeEvent, useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { IContactItem, useAppStore } from "../helpers/store";
 import { useNavigate } from "react-router-dom";
 import { CustomIcon } from "./customIcon";
@@ -11,13 +11,19 @@ export const ContactsList = () => {
   const [search, setSearch] = useState("");
   const navigate = useNavigate();
 
-  const filteredContacts = useMemo(
-    () =>
-      contacts.filter((item) =>
+  const filteredContacts = useMemo(() => {
+    let finalItems = [
+      ...contacts.sort((item1, item2) => item1.name.localeCompare(item2.name)),
+    ];
+
+    if (search) {
+      finalItems = finalItems.filter((item) =>
         item.name.toLowerCase().startsWith(search.toLowerCase())
-      ),
-    [search, contacts]
-  );
+      );
+    }
+
+    return finalItems;
+  }, [search, contacts]);
 
   const deleteContact = async (item: IContactItem) => {
     if (confirm(`Вы действительно хотите удалить контакт ${item.name}?`)) {

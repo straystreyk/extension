@@ -7,6 +7,7 @@ const shadowRoot = container?.attachShadow({
 });
 const contentContainer = document.createElement("div");
 const textAreaElement = document.createElement("div");
+const hideTextAreaDiv = document.createElement("div");
 const hideTextAreaBtn = document.createElement("button");
 const button = document.createElement("button");
 
@@ -21,6 +22,7 @@ button.innerText = "Зашифровать";
 hideTextAreaBtn.innerHTML =
   '<svg part="hide-textarea-btn-svg" xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24"><path fill="currentColor" d="m12 10.8l-3.9 3.9q-.275.275-.7.275t-.7-.275q-.275-.275-.275-.7t.275-.7l4.6-4.6q.3-.3.7-.3t.7.3l4.6 4.6q.275.275.275.7t-.275.7q-.275.275-.7.275t-.7-.275z"/></svg>';
 hideTextAreaBtn.setAttribute("part", "hide-textarea-btn");
+hideTextAreaDiv.setAttribute("part", "hide-textarea-wrapper");
 
 const keyDownStopPropagation = (e: KeyboardEvent) => {
   e.stopPropagation();
@@ -85,7 +87,10 @@ const createShifronimTextField = async () => {
   window?.addEventListener("keypress", keyDownStopPropagation, true);
 
   container.id = "___SHIFRONIM_WRAPPER___";
-  contentContainer.appendChild(hideTextAreaBtn);
+  hideTextAreaDiv.innerHTML =
+    "<span part='hide-textarea-wrapper-text'>Shifronim</span>";
+  hideTextAreaDiv.appendChild(hideTextAreaBtn);
+  contentContainer.appendChild(hideTextAreaDiv);
   contentContainer.appendChild(textAreaElement);
   contentContainer.appendChild(button);
 
