@@ -101,6 +101,7 @@ const createShifronimTextField = async () => {
 
   shadowRoot.appendChild(contentContainer);
 
+  console.log(document.body);
   document.body?.prepend(container);
 };
 const removeShifronimTextField = () => {

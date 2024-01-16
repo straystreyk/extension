@@ -32,7 +32,7 @@
         "./assets/content-script.js"
       ],
       "css": ["./assets/shifronim.css"],
-      "run_at": "document_start"
+      "run_at": "document_end"
     }
   ],
   "host_permissions": [
