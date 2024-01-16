@@ -63,13 +63,15 @@ p {
 
   &:hover {
     background: var(--SHIFRONIM_COLOR3);
-    color: var(--SHIFRONIM_WHITE);
+    color: var(--SHIFRONIM_COLOR5);
     box-shadow: 0 0 3px var(--SHIFRONIM_COLOR5);
   }
 }
 
 .turn-on-off-btn.active {
   color: var(--SHIFRONIM_COLOR5);
+  background: var(--SHIFRONIM_COLOR3);
+  box-shadow: 0 0 3px var(--SHIFRONIM_COLOR5);
 }
 
 label {
