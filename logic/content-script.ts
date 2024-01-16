@@ -25,6 +25,11 @@ hideTextAreaBtn.setAttribute("part", "hide-textarea-btn");
 hideTextAreaDiv.setAttribute("part", "hide-textarea-wrapper");
 
 const keyDownStopPropagation = (e: KeyboardEvent) => {
+  if (
+    (e.key === "Enter" || e.code === "Enter") &&
+    document.activeElement.id !== "___SHIFRONIM_WRAPPER___"
+  )
+    return;
   e.stopPropagation();
 };
 
