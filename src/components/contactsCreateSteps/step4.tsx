@@ -58,13 +58,13 @@ const SenderStep4: FC<{
   return (
     <StepWrapper wizardOptions={wizardOptions}>
       <h3 className="wizard-title">
-        Шаг 4: Введите полученное от собеседника зашифрованное сообщение.
+        Шаг 4: Вставьте публичный ключ, полученный от собеседника.
       </h3>
       <label>Зашифрованный текст</label>
       <div className="rsa-section-input-wrapper">
         <textarea
           className="wizard-textarea"
-          placeholder="Введите зашифрованный текст"
+          placeholder="Введите публичный ключ"
           value={value}
           onChange={(e) => setValue(e.target.value)}
         />
